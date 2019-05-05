@@ -1,21 +1,21 @@
 - company: Generali
   link: https://www.generali.ch/en/
   job_title: Software Architect / DevOps specialist
-  quote: >
-     TBD
   dates: Sept 2018 - Present
   description: | # this will include new lines to allow paragraphs
-    Working as a freelance consultant on a private cloud solution with <strong>OpenShift</strong> (<strong>Kubernetes</strong>), <strong>Docker</strong>, and <strong>Kafka</strong>.
-
-    I'm in c
+    Working as a freelance consultant on a private cloud solution based on Openshift.
+    <ul>
+    <li><strong>GitOps</strong> implementation </li>
+        <li><strong>CICD</strong> pipelines refactor </li>
+         <li>Monitoring infrastructure (<strong>Prometheus</strong> and <strong>Grafana</strong>)</li>
+           <li>Docker image security scan set up with  <strong>Anchore Engine</strong></li>
+             <li><strong>Mattermost</strong> set up</li>
 
 
 - company: Sporfie
   link: https://sporfie.com
   job_title: Full Stack Software Engineer
   dates: Feb 2016 - Present
-  quote: >
-   TBD
   description: | # this will include new lines to allow paragraphs
     Design and implementation of Sporfie back-end infrastructure, a production-ready SaaS product (<strong>Java 8, Spring Boot, Firebase, REST API, GraphQL, Elasticsearch,
                                                 AWS Elastic Beanstalk, Docker, AWS S3, AWS Elastic Cache / Redis, AWS Cloud
