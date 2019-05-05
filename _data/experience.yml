@@ -1,3 +1,11 @@
+- company: Generali
+  link: https://www.generali.ch/en/
+  job_title: Software Architect / DevOps specialist
+  dates: Sept 2018 - Present
+  description: | # this will include new lines to allow paragraphs
+    Working as a freelance consultant on a private cloud solution with <strong>OpenShift</strong> (<strong>Kubernetes</strong>), <strong>Docker</strong>, and <strong>Kafka</strong>.
+
+
 - company: The Boring Company
   link: boringcompany.com
   job_title: Senior Network System Administrator
