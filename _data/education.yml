@@ -1,6 +1,9 @@
 - name: Alma Mater Studiorum - Bologne, Italie
   dates: 2011
-  qualification: Master's Degree in Computer Science
+  description: | # this will include new lines to allow paragraphs
+    Master's Degree in Computer Science
+
 - name: Alma Mater Studiorum - Bologne, Italie
   dates: 2007
-  qualification: Bachelor's degree in Internet Sciences
+  description: | # this will include new lines to allow paragraphs
+      Bachelor's degree in Internet Sciences

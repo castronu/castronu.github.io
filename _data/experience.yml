@@ -5,10 +5,10 @@
   description: | # this will include new lines to allow paragraphs
     Working as a freelance consultant on a private cloud solution based on Openshift.
     <ul>
-    <li><strong>GitOps</strong> implementation </li>
-        <li><strong>CICD</strong> pipelines refactor </li>
-         <li>Monitoring infrastructure (<strong>Prometheus</strong> and <strong>Grafana</strong>)</li>
-           <li>Docker image security scan set up with  <strong>Anchore Engine</strong></li>
+    <li><mark>GitOps</mark> implementation </li>
+        <li>CICD pipelines refactor </li>
+         <li>Monitoring infrastructure (<mark>Prometheus</mark> and <mark>Grafana</mark>)</li>
+           <li><mark>Docker</mark> image security scan set up with  Anchore Engine</strong></li>
              <li><strong>Mattermost</strong> set up</li>
 
 
