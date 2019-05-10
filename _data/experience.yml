@@ -29,6 +29,7 @@
 
 - company: Hortis GRC SA
   job_title: Software Engineer
+  link: https://www.hortis.ch
   dates: Nov 2014 - Oct 2015
   description: | # this will include new lines to allow paragraphs
     Back-end java development of GlassIG, a <mark>SaaS</mark> for corporate information governance.
@@ -36,6 +37,7 @@
 
 
 - company: Swissquote Bank SA
+  link: https://www.swissquote.ch
   job_title: Development Engineer
   dates: Jul 2011 – Aug 2013
   description: | # this will include new lines to allow paragraphs
