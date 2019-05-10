@@ -17,23 +17,21 @@
   job_title: Full Stack Software Engineer
   dates: Feb 2016 - Present
   description: | # this will include new lines to allow paragraphs
-    Design and implementation of Sporfie back-end infrastructure, a production-ready SaaS product (<strong>Java 8, Spring Boot, Firebase, REST API, GraphQL, Elasticsearch,
-                                                AWS Elastic Beanstalk, Docker, AWS S3, AWS Elastic Cache / Redis, AWS Cloud
-                                                Front, Serverless Architecture, Microservices Architecture, Spring Data, MySQL</strong>)
+    Design and implementation of Sporfie back-end infrastructure, a production-ready SaaS product (Java 8, Spring Boot, <mark>Firebase</mark>, REST API, <mark>GraphQL</mark>, <mark>Elasticsearch</mark>,
+                                                AWS Elastic Beanstalk, <mark>Docker</mark>, AWS S3, AWS Elastic Cache / <mark>Redis</mark>, AWS Cloud
+                                                Front, Serverless Architecture, <mark>CircleCI</mark>, Microservices Architecture, Spring Data, MySQL)
 
 - company: Freelance
   job_title: Software Engineer / Entrepreneur
   dates: Oct 2015 - Present
   description: | # this will include new lines to allow paragraphs
-   Lean startup experiments with cloud deployment (<strong>Amazon AWS</strong>), cutting
-                                       edge frameworks and high productivity tools (<strong>Firebase, AngularJS, Node.js,
-                                           Spring Boot, CircleCI, SaaS</strong>).
+   Lean startup experiments with cloud deployment, cutting edge frameworks and high productivity tools.
 
 - company: Hortis GRC SA
   job_title: Software Engineer
   dates: Nov 2014 - Oct 2015
   description: | # this will include new lines to allow paragraphs
-    Back-end java development of GlassIG, a SaaS for corporate information governance.
+    Back-end java development of GlassIG, a <mark>SaaS</mark> for corporate information governance.
     Involved in the process of migration from traditional on-premise infrastructure to the cloud.
 
 
@@ -43,15 +41,14 @@
   description: | # this will include new lines to allow paragraphs
     <p>Development and maintenance of back-end batches and daemons (80%) and web applications (20%).
                                     <ul>
-                                        <li><strong>Cash management</strong> (incoming and outgoing payments)</li>
-                                        <li>Interface between front (Swissquote platform) and back-end (<strong>Temenos
-                                            T24</strong> banking package)
+                                        <li>Cash management (incoming and outgoing payments)</li>
+                                        <li>Interface between front (Swissquote platform) and back-end (Temenos
+                                            T24 <mark>banking</mark> package)
                                         </li>
                                         <li>Documents automation</li>
-                                        <li>Technologies / Frameworks / Tools :<strong>Java, Spring, Hibernate, Maven,
-                                            Mercurial, TDD, JUnit, jBehave, Spring Integration, JMS, API development, BASH,
-                                            Oracle DB, SQL, Atomikos, Quartz, JQuery, Agile methodologies (Scrum, Kanban),
-                                            Jira, Confluence, Hudson & Jankins, DevOPS (Linux and Solaris OS deep level
-                                            knowledge), Latex</strong>
+                                        <li>Technologies / Frameworks / Tools :Java, Spring, Hibernate, Maven,
+                                            Mercurial, <mark>TDD</mark>, JUnit, jBehave, Spring Integration, JMS, API development, BASH,
+                                            Oracle DB, SQL, Atomikos, Quartz, JQuery, <mark>Agile</mark> methodologies (Scrum, Kanban),
+                                            Jira, Confluence, Hudson & Jankins
                                         </li>
                                     </ul>
