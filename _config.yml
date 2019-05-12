@@ -15,8 +15,16 @@ url: https://www.diegocastronuovo.com/
 twitter:
   username: diegocastronew
   card: summary
-logo:  /images/profile.jpg
-image:  /images/profile.jpg
+logo:  images/profile.jpg
+image:
+  path:  images/profile.jpg
+  height: 100
+  width: 100
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /images/profile.jpg
 
 # Social links
 twitter_username: diegocastronew
