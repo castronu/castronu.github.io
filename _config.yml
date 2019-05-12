@@ -6,6 +6,7 @@ repository: sproogen/resume-theme
 name: Diego Castronuovo
 title: Independent Software Engineer
 description: I help startups and corporates to get ideas into production
+og:description: I help startups and corporates to get ideas into production
 email: info@diegocastronuovo.com
 website: www.diegocastronuovo.com
 
