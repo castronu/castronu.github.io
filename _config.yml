@@ -44,12 +44,16 @@ linkedin_username: castronuovodiego
 # about_title: About Me
 about_profile_image: images/profile.jpg
 about_content: | # this will include new lines to allow paragraphs
-  Hi, my name's Diego and I'm a <mark>DevOps</mark> and <mark>full-stack</mark> engineer.
+  Hi, my name's Diego and I'm a <mark>DevOps</mark> and <mark>Full-Stack</mark> engineer.
   I help startups and corporates to get ideas into production by using cutting-edge technologies like <mark>Kubernetes</mark>, <mark>Openshift</mark>, <mark>AWS</mark> and <mark>Spring Boot</mark>.
 
-  I started as a back-end developer in the  <mark>financial</mark> industry, where I learned  <mark>agile</mark> methods and software quality standards. Then my entrepreneurial spirit led me to work on different projects using the [lean startup](https://en.wikipedia.org/wiki/Lean_startup){:target="_blank"} method.
+  I started as a back-end developer in the  <mark>financial</mark> industry, where I learned  <mark>agile</mark> methods and software quality standards. Then my entrepreneurial spirit led me to work on different projects using the [lean startup](https://en.wikipedia.org/wiki/Lean_startup){:target='_blank'} method.
+
+  Some principles I use: [Twelve Factor App Methodology](https://en.wikipedia.org/wiki/Twelve-Factor_App_methodology){:target='_blank'}, [Unix Philosophy](https://en.wikipedia.org/wiki/Unix_philosophy){:target='_blank'}, and [The Agile Manifesto](https://en.wikipedia.org/wiki/Agile_software_development#The_Agile_Manifesto){:target='_blank'}.
 
   I'm always open to discuss ideas and collaboration opportunities.
+
+
 
 # Projects Section
 # projects_title: Projects

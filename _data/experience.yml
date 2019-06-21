@@ -8,7 +8,7 @@
 
         <li><mark>CICD</mark> refactor using a <mark>GitOps</mark> approach</li>
          <li>Monitoring infrastructure (<mark>Prometheus</mark> and <mark>Grafana</mark>)</li>
-           <li><mark>Docker</mark> image <mark>security</mark> scan set up with  Anchore Engine</li>
+           <li><mark>Docker</mark> image <mark>security</mark> scan set up with Anchore Engine</li>
 
 
 - company: Sporfie
@@ -50,6 +50,6 @@
                                         <li>Technologies / Frameworks / Tools :Java, Spring, Hibernate, Maven,
                                             Mercurial, <mark>TDD</mark>, JUnit, jBehave, Spring Integration, JMS, API development, BASH,
                                             Oracle DB, SQL, Atomikos, Quartz, JQuery, <mark>Agile</mark> methodologies (Scrum, Kanban),
-                                            Jira, Confluence, Hudson & Jankins
+                                            Jira, Confluence, Hudson & Jenkins
                                         </li>
                                     </ul>
