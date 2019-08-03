@@ -3,7 +3,7 @@
   job_title: Software Architect / DevOps specialist
   dates: Sept 2018 - Present
   description: | # this will include new lines to allow paragraphs
-    Working as a freelance consultant on a private cloud solution based on Openshift.
+    Working as a freelance consultant on a private cloud solution based on OpenShift.
     <ul>
 
         <li><mark>CICD</mark> refactor using a <mark>GitOps</mark> approach</li>
@@ -13,7 +13,7 @@
 
 - company: Sporfie
   link: https://sporfie.com
-  job_title: Full Stack Software Engineer
+  job_title: Full-Stack Software Engineer
   dates: Feb 2016 - Present
   description: | # this will include new lines to allow paragraphs
     Design and implementation of Sporfie back-end infrastructure, a production-ready SaaS product (Java 8, Spring Boot, <mark>Firebase</mark>, REST API, <mark>GraphQL</mark>, <mark>Elasticsearch</mark>,
