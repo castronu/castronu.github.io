@@ -6,8 +6,8 @@ repository: sproogen/resume-theme
 name: Diego Castronuovo
 title: Independent Software Engineer
 subtitle: Mysub
-description: DevOps and Full-Stack engineer available remotely. I help startups and corporates to get ideas into production
-og:description: DevOps and Full-Stack engineer available remotely. I help startups and corporates to get ideas into production
+description: DevOps and Full-Stack engineer available remotely. I help startups and corporates to get ideas into production.
+og:description: DevOps and Full-Stack engineer available remotely. I help startups and corporates to get ideas into production.
 og:title: Diego Castronuovo - I help startups and corporates to get ideas into production
 email: info@diegocastronuovo.com
 #website: www.diegocastronuovo.com
