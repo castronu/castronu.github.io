@@ -18,21 +18,21 @@
   description: | # this will include new lines to allow paragraphs
     Design and implementation of Sporfie back-end infrastructure, a production-ready SaaS product (Java 8, Spring Boot, <mark>Firebase</mark>, REST API, <mark>GraphQL</mark>, <mark>Elasticsearch</mark>,
                                                 AWS Elastic Beanstalk, <mark>Docker</mark>, AWS S3, AWS Elastic Cache / <mark>Redis</mark>, AWS Cloud
-                                                Front, Serverless Architecture, <mark>CircleCI</mark>, Microservices Architecture, Spring Data, MySQL)
+                                                Front, Serverless Architecture, <mark>CircleCI</mark>, Microservices Architecture, Spring Data, and MySQL)
 
 - company: Freelance
   job_title: Software Engineer / Entrepreneur
   dates: Oct 2015 - Present
   description: | # this will include new lines to allow paragraphs
-   Lean startup experiments with cloud deployment, cutting edge frameworks and high productivity tools.
+   Lean startup experiments with cloud deployment, cutting edge frameworks and productivity tools.
 
 - company: Hortis GRC SA
   job_title: Software Engineer
   link: https://www.hortis.ch
   dates: Nov 2014 - Oct 2015
   description: | # this will include new lines to allow paragraphs
-    Back-end java development of GlassIG, a <mark>SaaS</mark> for corporate information governance.
-    Involved in the process of migration from traditional on-premise infrastructure to the cloud.
+    Back-end Java development of GlassIG, a <mark>SaaS</mark> for corporate information governance.
+    Involved in the migration from a traditional on-premise infrastructure to the cloud.
 
 
 - company: Swissquote Bank SA
@@ -43,13 +43,13 @@
     <p>Development and maintenance of back-end batches and daemons (80%) and web applications (20%).
                                     <ul>
                                         <li>Cash management (incoming and outgoing payments)</li>
-                                        <li>Interface between front (Swissquote platform) and back-end (Temenos
+                                        <li>Interface between front-end (Swissquote platform) and back-end (Temenos
                                             T24 <mark>banking</mark> package)
                                         </li>
                                         <li>Documents automation</li>
-                                        <li>Technologies / Frameworks / Tools :Java, Spring, Hibernate, Maven,
+                                        <li>Technologies, frameworks and tools :Java, Spring, Hibernate, Maven,
                                             Mercurial, <mark>TDD</mark>, JUnit, jBehave, Spring Integration, JMS, API development, BASH,
-                                            Oracle DB, SQL, Atomikos, Quartz, JQuery, <mark>Agile</mark> methodologies (Scrum, Kanban),
+                                            Oracle DB, SQL, Atomikos, Quartz, JQuery, <mark>Agile</mark> methodologies (Scrum and Kanban),
                                             Jira, Confluence, Hudson & Jenkins
                                         </li>
                                     </ul>
