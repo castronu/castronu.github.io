@@ -1,16 +1,3 @@
-- company: Generali
-  link: https://www.generali.ch/en/
-  job_title: Software Architect / DevOps specialist
-  dates: Sept 2018 - Present
-  description: | # this will include new lines to allow paragraphs
-    Working as a freelance consultant on a private cloud solution based on OpenShift.
-    <ul>
-
-        <li><mark>CICD</mark> refactor using a <mark>GitOps</mark> approach</li>
-         <li>Monitoring infrastructure (<mark>Prometheus</mark> and <mark>Grafana</mark>)</li>
-           <li><mark>Docker</mark> image <mark>security</mark> scan set up with Anchore Engine</li>
-
-
 - company: Sporfie
   link: https://sporfie.com
   job_title: Full-Stack Software Engineer
@@ -19,6 +6,18 @@
     Design and implementation of Sporfie back-end infrastructure, a production-ready SaaS product (Java 8, Spring Boot, <mark>Firebase</mark>, REST API, <mark>GraphQL</mark>, <mark>Elasticsearch</mark>,
                                                 AWS Elastic Beanstalk, <mark>Docker</mark>, AWS S3, AWS Elastic Cache / <mark>Redis</mark>, AWS Cloud
                                                 Front, Serverless Architecture, <mark>CircleCI</mark>, Microservices Architecture, Spring Data, and MySQL)
+
+- company: Generali Insurance
+  link: https://www.generali.ch/en/
+  job_title: Software Architect / DevOps specialist
+  dates: Sept 2018 - Dec 2019
+  description: | # this will include new lines to allow paragraphs
+    Working as a freelance consultant on a private cloud solution based on OpenShift.
+    <ul>
+
+        <li><mark>CICD</mark> refactor using a <mark>GitOps</mark> approach</li>
+         <li>Monitoring infrastructure (<mark>Prometheus</mark> and <mark>Grafana</mark>)</li>
+           <li><mark>Docker</mark> image <mark>security</mark> scan set up with Anchore Engine</li>
 
 - company: Freelance
   job_title: Software Engineer / Entrepreneur
