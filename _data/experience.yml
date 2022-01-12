@@ -3,9 +3,8 @@
   job_title: Full-Stack Software Engineer
   dates: Feb 2016 - Present
   description: | # this will include new lines to allow paragraphs
-    Design and implementation of Sporfie back-end infrastructure, a production-ready SaaS product (Java 8, Spring Boot, <mark>Firebase</mark>, REST API, <mark>GraphQL</mark>, <mark>Elasticsearch</mark>,
-                                                AWS Elastic Beanstalk, <mark>Docker</mark>, AWS S3, AWS Elastic Cache / <mark>Redis</mark>, AWS Cloud
-                                                Front, Serverless Architecture, <mark>CircleCI</mark>, Microservices Architecture, Spring Data, and MySQL)
+    Creation of the DevOps and back-end infrastructure of Sporfie, a live streaming SaaS product (<mark>AWS</mark> Beanstalk|Fargate|Lambda, Spring Boot, Python, Node.js, <mark>HAProxy</mark>, <mark>Redis</mark>, <mark>Firebase</mark>, REST API, <mark>GraphQL</mark>, <mark>Elasticsearch</mark>,
+                                                <mark>Docker</mark>, <mark>Redis</mark>, Serverless Architecture, <mark>CircleCI</mark>, Microservices Architecture)
 
 - company: Generali Insurance
   link: https://www.generali.ch/en/
