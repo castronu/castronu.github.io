@@ -1,126 +1,80 @@
-  Skip to content
-    Search or jump to…
-    Pull requests
-    Issues
-    Codespaces
-    Marketplace
-    Explore
-    
-    @castronu
-    castronu
-    /
-    castronu.github.io
-    Public
-    Fork your own copy of castronu/castronu.github.io
-    Code
-    Issues
-    Pull requests
-    Actions
-    Projects
-    Wiki
-    Security
-    Insights
-    Settings
-    castronu.github.io/_config.yml
-    @castronu
-    castronu Remote repo fixed
-    Latest commit 2178c46 on Aug 4, 2021
-    History
-    1 contributor
-    Executable File  87 lines (70 sloc)  2.88 KB
+# Site
+repository: sproogen/resume-theme
+# favicon: images/favicon.ico
 
-  # Site
-  repository: sproogen/resume-theme
-  # favicon: images/favicon.ico
+# Personal info
+name: Diego Castronuovo
+title: Independent DevOps Architect
+subtitle: Mysub
+description: DevOps and Full-Stack engineer available remotely. I help startups and corporates to get ideas into production.
+og:description: DevOps and Full-Stack engineer available remotely. I help startups and corporates to get ideas into production.
+og:title: Diego Castronuovo - I help startups and corporates to get ideas into production
+email: info@diegocastronuovo.com
+#website: www.diegocastronuovo.com
 
-  # Personal info
-  name: Diego Castronuovo
-  title: Independent DevOps Architect
-  subtitle: Mysub
-  description: DevOps and Full-Stack engineer available remotely. I help startups and corporates to get ideas into production.
-  og:description: DevOps and Full-Stack engineer available remotely. I help startups and corporates to get ideas into production.
-  og:title: Diego Castronuovo - I help startups and corporates to get ideas into production
-  email: info@diegocastronuovo.com
-  #website: www.diegocastronuovo.com
+#seo
+url: https://www.diegocastronuovo.com/
+twitter:
+  username: diegocastronew
+  card: summary
+logo:  images/profile.jpg
+image:
+  path:  images/profile.jpg
+  height: 100
+  width: 100
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /images/profile.jpg
 
-  #seo
-  url: https://www.diegocastronuovo.com/
-  twitter:
-    username: diegocastronew
-    card: summary
-  logo:  images/profile.jpg
-  image:
-    path:  images/profile.jpg
-    height: 100
-    width: 100
-  defaults:
-    - scope:
-        path: ""
-      values:
-        image: /images/profile.jpg
+# Social links
+twitter_username: diegocastronew
+github_username:  castronu
+# dribbble_username: jekyll
+# facebook_username: jekyll
+# flickr_username: jekyll
+#instagram_username: castronuovodiego
+linkedin_username: castronuovodiego
+# pinterest_username: jekyll
+#youtube_username: globalmtb
+# googleplus_username: +jekyll
 
-  # Social links
-  twitter_username: diegocastronew
-  github_username:  castronu
-  # dribbble_username: jekyll
-  # facebook_username: jekyll
-  # flickr_username: jekyll
-  #instagram_username: castronuovodiego
-  linkedin_username: castronuovodiego
-  # pinterest_username: jekyll
-  #youtube_username: globalmtb
-  # googleplus_username: +jekyll
+# About Section
+# about_title: About Me
+about_profile_image: images/profile.jpg
+about_content: | # this will include new lines to allow paragraphs
+  Hi, my name's Diego and I'm a DevOps and Full-Stack engineer.
+  I help startups and corporates to get ideas into production by using cutting-edge technologies like Kubernetes, GitOps and AWS services.
+  I started as a back-end developer in the  financial industry, where I learned  agile methods and software quality standards. Then my entrepreneurial spirit led me to work on different projects using the [lean startup](https://en.wikipedia.org/wiki/Lean_startup){:target='_blank'} method.
+  Some principles I use: [the twelve-factor app methodology](https://en.wikipedia.org/wiki/Twelve-Factor_App_methodology){:target='_blank'}, [Unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy){:target='_blank'}, and [the Agile Manifesto](https://en.wikipedia.org/wiki/Agile_software_development#The_Agile_Manifesto){:target='_blank'}.
+  I'm always open to discussing ideas and collaboration opportunities.
+# Projects Section
+# projects_title: Projects
 
-  # About Section
-  # about_title: About Me
-  about_profile_image: images/profile.jpg
-  about_content: | # this will include new lines to allow paragraphs
-    Hi, my name's Diego and I'm a DevOps and Full-Stack engineer.
-    I help startups and corporates to get ideas into production by using cutting-edge technologies like Kubernetes.
-    I started as a back-end developer in the financial industry, where I learned  agile methods and software quality standards. Then my entrepreneurial spirit led me to work on different projects using the [lean startup](https://en.wikipedia.org/wiki/Lean_startup){:target='_blank'} method.
-    Some principles I use: [the twelve-factor app methodology](https://en.wikipedia.org/wiki/Twelve-Factor_App_methodology){:target='_blank'}, [Unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy){:target='_blank'}, and [the Agile Manifesto](https://en.wikipedia.org/wiki/Agile_software_development#The_Agile_Manifesto){:target='_blank'}.
-    I'm always open to discussing ideas and collaboration opportunities.
-  # Projects Section
-  # projects_title: Projects
+# Experience Section
+# experience_title: Experience
 
-  # Experience Section
-  # experience_title: Experience
+# Education Section
+# educaton_title: Education
 
-  # Education Section
-  # educaton_title: Education
+# More Section
+# more_title: A Little More About Me
+more_content: | # this will include new lines to allow paragraphs
+  Alongside my interests in software engineering some of my other interests and hobbies are:
+   - Being a father
+   - Cooking
+   - Travelling
+# Footer
+footer_show_references: true
 
-  # More Section
-  # more_title: A Little More About Me
-  more_content: | # this will include new lines to allow paragraphs
-    Alongside my interests in software engineering some of my other interests and hobbies are:
-     - Being a father
-     - Cooking
-     - Travelling
-  # Footer
-  footer_show_references: true
+# Build settings
+remote_theme: castronu/modern-resume-theme
 
-  # Build settings
-  remote_theme: castronu/modern-resume-theme
+sass:
+  sass_dir: _sass
+  style: compressed
 
-  sass:
-    sass_dir: _sass
-    style: compressed
-
-  plugins:
-    - jekyll-seo-tag
-    - jekyll-redirect-from
-    Footer
-    © 2023 GitHub, Inc.
-    Footer navigation
-    Terms
-    Privacy
-    Security
-    Status
-    Docs
-    Contact GitHub
-    Pricing
-    API
-    Training
-    Blog
-    About
-    castronu.github.io/_config.yml at master · castronu/castronu.github.io
+plugins:
+  - jekyll-seo-tag
+  - jekyll-redirect-from
