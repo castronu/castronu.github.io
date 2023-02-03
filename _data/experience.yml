@@ -1,35 +1,35 @@
 - company: Sporfie
   link: https://sporfie.com
-  job_title: Full-Stack Software Engineer
+  job_title: DevOps Architect
   dates: Feb 2016 - Present
   description: | # this will include new lines to allow paragraphs
-    Creation of the DevOps and back-end infrastructure of Sporfie, a live streaming SaaS product (<mark>AWS</mark> Beanstalk | Fargate | Lambda, Spring Boot, Python, Node.js, <mark>HAProxy</mark>, <mark>Redis</mark>, <mark>Firebase</mark>, REST API, <mark>GraphQL</mark>, <mark>Elasticsearch</mark>, 
-    <mark>Docker</mark>, <mark>Serverless</mark> Architecture, <mark>CircleCI</mark>, Microservices Architecture)
+    Creation of the DevOps and back-end infrastructure of Sporfie, a live streaming SaaS product (Kubernetes, ArgoCD, AWS Beanstalk | Fargate | Lambda, Spring Boot, Python, Node.js, Prometheus, Grafana, HAProxy, Redis, Firebase, REST API, GraphQL, Elasticsearch, 
+    Docker, Serverless Architecture, CircleCI, Microservices Architecture)
 
 - company: Generali Insurance
   link: https://www.generali.ch/en/
-  job_title: Software Architect / DevOps specialist
+  job_title: DevOps specialist
   dates: Sept 2018 - Dec 2019
   description: | # this will include new lines to allow paragraphs
     Working as a freelance consultant on a private cloud solution based on OpenShift.
     <ul>
 
-        <li><mark>CICD</mark> refactor using a <mark>GitOps</mark> approach</li>
-         <li>Monitoring infrastructure (<mark>Prometheus</mark> and <mark>Grafana</mark>)</li>
-           <li><mark>Docker</mark> image <mark>security</mark> scan set up with Anchore Engine</li>
+        <li>CICD refactor using a GitOps approach</li>
+         <li>Monitoring infrastructure (Prometheus and Grafana)</li>
+           <li>Docker image security scan set up with Anchore Engine</li>
 
 - company: Freelance
   job_title: Software Engineer / Entrepreneur
   dates: Oct 2015 - Present
   description: | # this will include new lines to allow paragraphs
-   Lean startup experiments with cloud deployment, cutting edge frameworks and productivity tools.
+    Lean startup experiments with cloud deployment, cutting edge frameworks and productivity tools.
 
 - company: Hortis GRC SA
   job_title: Software Engineer
   link: https://www.hortis.ch
   dates: Nov 2014 - Oct 2015
   description: | # this will include new lines to allow paragraphs
-    Back-end Java development of GlassIG, a <mark>SaaS</mark> for corporate information governance.
+    Back-end Java development of GlassIG, a SaaS for corporate information governance.
     Involved in the migration from a traditional on-premise infrastructure to the cloud.
 
 
@@ -42,12 +42,12 @@
                                     <ul>
                                         <li>Cash management (incoming and outgoing payments)</li>
                                         <li>Interface between front-end (Swissquote platform) and back-end (Temenos
-                                            T24 <mark>banking</mark> package)
+                                            T24 banking package)
                                         </li>
                                         <li>Documents automation</li>
                                         <li>Technologies, frameworks and tools :Java, Spring, Hibernate, Maven,
-                                            Mercurial, <mark>TDD</mark>, JUnit, jBehave, Spring Integration, JMS, API development, BASH,
-                                            Oracle DB, SQL, Atomikos, Quartz, JQuery, <mark>Agile</mark> methodologies (Scrum and Kanban),
+                                            Mercurial, TDD, JUnit, jBehave, Spring Integration, JMS, API development, BASH,
+                                            Oracle DB, SQL, Atomikos, Quartz, JQuery, Agile methodologies (Scrum and Kanban),
                                             Jira, Confluence, Hudson & Jenkins
                                         </li>
                                     </ul>
