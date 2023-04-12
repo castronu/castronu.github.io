@@ -44,11 +44,14 @@ linkedin_username: castronuovodiego
 # about_title: About Me
 about_profile_image: images/profile.jpg
 about_content: | # this will include new lines to allow paragraphs
-  Hi, my name's Diego and I'm a DevOps and Full-Stack engineer.
-  I help startups and corporates to get ideas into production by using cutting-edge technologies like Kubernetes, GitOps and AWS services.
-  I started as a back-end developer in the  financial industry, where I learned  agile methods and software quality standards. Then my entrepreneurial spirit led me to work on different projects using the [lean startup](https://en.wikipedia.org/wiki/Lean_startup){:target='_blank'} method.
-  Some principles I use: [the twelve-factor app methodology](https://en.wikipedia.org/wiki/Twelve-Factor_App_methodology){:target='_blank'}, [Unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy){:target='_blank'}, and [the Agile Manifesto](https://en.wikipedia.org/wiki/Agile_software_development#The_Agile_Manifesto){:target='_blank'}.
-  I'm always open to discussing ideas and collaboration opportunities.
+
+  Greetings, I am Diego, a skilled DevOps and Full-Stack Engineer with expertise in helping businesses ranging from startups to corporates to deploy their ideas into production. My proficiency lies in utilizing advanced technologies such as Kubernetes, AWS services and GitOps to optimize the development, delivery, and deployment processes.
+
+  My professional journey began as a back-end developer in the financial industry, where I gained knowledge of agile methodologies and software quality standards. I have since honed my skills, incorporating principles of the lean startup method into my work across diverse projects.
+
+  My unwavering commitment to collaboration and sharing knowledge make me an approachable team player. I am always eager to connect with individuals and businesses to explore ideas and discuss opportunities for collaboration.
+
+
 # Projects Section
 # projects_title: Projects
 
