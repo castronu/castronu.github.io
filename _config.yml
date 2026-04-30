@@ -4,11 +4,11 @@ repository: sproogen/resume-theme
 
 # Personal info
 name: Diego Castronuovo
-title: Independent DevOps Architect
-subtitle: Mysub
-description: DevOps and Full-Stack engineer available remotely. I help startups and corporates to get ideas into production.
-og:description: DevOps and Full-Stack engineer available remotely. I help startups and corporates to get ideas into production.
-og:title: Diego Castronuovo - I help startups and corporates to get ideas into production
+title: AI-Native Cloud & Platform Engineer
+subtitle: DevOps + Full-Stack — ship features fast with LLMs
+description: Cloud & platform engineer building production systems end-to-end — Kubernetes, CI/CD, back end — with an AI-first delivery approach. Available remotely from Geneva.
+og:description: Cloud & platform engineer building production systems end-to-end — Kubernetes, CI/CD, back end — with an AI-first delivery approach. Available remotely from Geneva.
+og:title: Diego Castronuovo - AI-Native Cloud & Platform Engineer
 email: info@diegocastronuovo.com
 #website: www.diegocastronuovo.com
 
@@ -45,11 +45,15 @@ linkedin_username: castronuovodiego
 about_profile_image: images/profile.jpg
 about_content: | # this will include new lines to allow paragraphs
 
-  Greetings, I am Diego, a skilled DevOps and Full-Stack Engineer with expertise in helping businesses ranging from startups to corporates to deploy their ideas into production. My proficiency lies in utilizing advanced technologies such as Kubernetes, AWS services and GitOps to optimize the development, delivery, and deployment processes.
+  Greetings, I am Diego, an AI-Native Cloud & Platform Engineer based in Geneva. I build and run production platforms end-to-end — cloud, Kubernetes, CI/CD, and the back end on top — with a focus on video streaming and data-heavy systems where reliability, cost, and performance matter.
 
-  My professional journey began as a back-end developer in the financial industry, where I gained knowledge of agile methodologies and software quality standards. I have since honed my skills, incorporating principles of the lean startup method into my work across diverse projects.
+  At Sporfie I have been involved since day one (2016) and led the move to Kubernetes in 2020 with a strong GitOps + IaC culture. I introduced Karpenter for smarter autoscaling, built a Kubernetes-native serverless framework to bypass Lambda limits, and run GPU workloads for streaming and AI tooling.
 
-  My unwavering commitment to collaboration and sharing knowledge make me an approachable team player. I am always eager to connect with individuals and businesses to explore ideas and discuss opportunities for collaboration.
+  My delivery is AI-first: I use coding LLMs to prototype, iterate, and ship faster — while keeping engineering discipline (clear architecture, tests, observability, security, cost controls). I own multiple back-end services in Java, Go, Python and Node, lead performance and scalability work, create load-testing suites, and implement multi-layer caching. I also have hands-on experience with CDN architecture and operations — cache strategy, invalidation, edge behavior, origin design, and the observability needed to troubleshoot real-world delivery issues.
+
+  Since 2016 I have partnered with founders and teams around Geneva as a consultant / fractional CTO, helping take ideas to production quickly — and I am open to co-founder roles where my platform and product execution can accelerate outcomes. While my recent focus is DevOps/platform, I am also comfortable going full-stack when it speeds up delivery.
+
+  Languages: Italian (native), English, Spanish and French (full professional). Finalist, PostFinance Digital Business Award 2015.
 
 
 # Projects Section

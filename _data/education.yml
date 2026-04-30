@@ -1,9 +1,13 @@
-- name: Alma Mater Studiorum - Bologna, Italy
-  dates: 2011
+- name: Università di Bologna - Bologna, Italy
+  dates: 2007 - 2011
   description: | # this will include new lines to allow paragraphs
-    Master's degree in Computer Science
+    Master's Degree in Computer Science
 
-- name: Alma Mater Studiorum - Bologna, Italy
-  dates: 2007
+- name: Università di Bologna - Bologna, Italy
+  dates: 2004 - 2007
   description: | # this will include new lines to allow paragraphs
-      Bachelor's degree in Internet Sciences
+    Bachelor's Degree in Internet Sciences
+
+- name: Liceo Scientifico Aldo Moro - Reggio Emilia, Italy
+  description: | # this will include new lines to allow paragraphs
+    Scientific high school

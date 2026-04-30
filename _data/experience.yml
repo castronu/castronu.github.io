@@ -1,53 +1,58 @@
 - company: Sporfie
   link: https://sporfie.com
-  job_title: DevOps Architect
+  job_title: Full Stack & DevOps Architect
   dates: Feb 2016 - Present
   description: | # this will include new lines to allow paragraphs
-    Creation of the DevOps and back-end infrastructure of Sporfie, a live streaming SaaS product (Kubernetes, ArgoCD, AWS Beanstalk | Fargate | Lambda, Spring Boot, Python, Node.js, Prometheus, Grafana, HAProxy, Redis, Firebase, REST API, GraphQL, Elasticsearch, 
-    Docker, Serverless Architecture, CircleCI, Microservices Architecture)
+    Building and running the platform end-to-end since day one of this live-streaming SaaS. Led the move to Kubernetes in 2020 with a strong GitOps + IaC culture; introduced Karpenter for smarter autoscaling, built a Kubernetes-native serverless framework to bypass Lambda limits, and run GPU workloads for streaming and AI tooling.
+
+    Own multiple back-end services (Java/Go/Python/Node), lead performance and scalability work, create load-testing suites, and implement multi-layer caching (including CloudFront for less-dynamic public APIs). Hands-on with CDN architecture and operations: cache strategy, invalidation, edge behavior, origin design, and the observability needed to troubleshoot real-world delivery issues.
+
+    Stack: Kubernetes, ArgoCD, Karpenter, Prometheus, Grafana, Docker, PostgreSQL, Java / Spring Boot, Node.js, Python (OpenCV, FFmpeg), Go, Firebase, GraphQL, REST, Redis / Redisson, Elasticsearch, HAProxy, CircleCI. AWS: Beanstalk, Fargate, Lambda, CloudFront, S3, ElasticTranscoder, CloudWatch.
 
 - company: Generali Insurance
   link: https://www.generali.ch/en/
-  job_title: DevOps specialist
+  job_title: DevOps Architect
   dates: Sept 2018 - Dec 2019
   description: | # this will include new lines to allow paragraphs
-    Working as a freelance consultant on a private cloud solution based on OpenShift.
+    Freelance consultant on a private cloud solution with OpenShift (Kubernetes), Docker and Kafka. Helped drive GitOps practices during the Kubernetes migration.
     <ul>
-
-        <li>CICD refactor using a GitOps approach</li>
-         <li>Monitoring infrastructure (Prometheus and Grafana)</li>
-           <li>Docker image security scan set up with Anchore Engine</li>
+      <li>CI/CD refactor using a GitOps approach</li>
+      <li>Monitoring infrastructure (Prometheus and Grafana)</li>
+      <li>Namespace quota management</li>
+      <li>Docker image security scan set up with Anchore Engine</li>
+    </ul>
 
 - company: Freelance
   job_title: Software Engineer / Entrepreneur
-  dates: Oct 2015 - Present
+  dates: Oct 2015 - Dec 2018
   description: | # this will include new lines to allow paragraphs
-    Lean startup experiments with cloud deployment, cutting edge frameworks and productivity tools.
+    Lean startup experiments with cloud deployment and high-productivity tools (Java 8, Spring Boot, AWS, Firebase, GraphQL, REST, Elasticsearch, Docker, CircleCI, serverless and microservices architectures, Spring Data, MySQL).
 
 - company: Hortis GRC SA
-  job_title: Software Engineer
+  job_title: Java Consultant
   link: https://www.hortis.ch
   dates: Nov 2014 - Oct 2015
   description: | # this will include new lines to allow paragraphs
-    Back-end Java development of GlassIG, a SaaS for corporate information governance.
-    Involved in the migration from a traditional on-premise infrastructure to the cloud.
-
+    Back-end Java development of GlassIG, a SaaS for corporate information governance. Involved in the migration from on-premise infrastructure to the cloud.
+    <ul>
+      <li>Coaching the dev team (talks on unit/integration tests and Java common libraries)</li>
+      <li>DSL for integration test automation</li>
+      <li>Application security and code quality (Veracode, SonarQube)</li>
+      <li>Configuration versioning system based on Zookeeper and XSLT</li>
+      <li>Maven multi-module refactoring; Spring config refactor (XML to Java-based)</li>
+      <li>Refactoring of legacy code</li>
+    </ul>
+    Stack: Spring, Hibernate, Maven, TDD, Zookeeper, AWS, Tomcat, Vagrant, Hazelcast, Jenkins, JIRA.
 
 - company: Swissquote Bank SA
   link: https://www.swissquote.ch
   job_title: Development Engineer
-  dates: Jul 2011 – Aug 2013
+  dates: Jul 2011 - Aug 2013
   description: | # this will include new lines to allow paragraphs
-    <p>Development and maintenance of back-end batches and daemons (80%) and web applications (20%).
-                                    <ul>
-                                        <li>Cash management (incoming and outgoing payments)</li>
-                                        <li>Interface between front-end (Swissquote platform) and back-end (Temenos
-                                            T24 banking package)
-                                        </li>
-                                        <li>Documents automation</li>
-                                        <li>Technologies, frameworks and tools :Java, Spring, Hibernate, Maven,
-                                            Mercurial, TDD, JUnit, jBehave, Spring Integration, JMS, API development, BASH,
-                                            Oracle DB, SQL, Atomikos, Quartz, JQuery, Agile methodologies (Scrum and Kanban),
-                                            Jira, Confluence, Hudson & Jenkins
-                                        </li>
-                                    </ul>
+    Development and maintenance of back-end batches and daemons (80%) and web applications (20%):
+    <ul>
+      <li>Cash management (incoming and outgoing payments)</li>
+      <li>Interface between the front (Swissquote platform) and back-end (Temenos T24 banking package)</li>
+      <li>Documents automation: report generation and spooling</li>
+    </ul>
+    Stack: Java, Spring, Hibernate, Maven, Mercurial, TDD, JUnit, Concordion, jBehave, Spring Integration, JMS, SOAP/Axis, Stripes, Resin, Flex, ANSI C, Bash, Perl, HP Dialogue, Scala, Oracle DB, SQL, Atomikos, Quartz, jQuery, Scrum/Kanban, Jira, Confluence, Hudson/Jenkins, Linux & Solaris.
