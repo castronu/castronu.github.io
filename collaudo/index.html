@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collaudo | Production readiness checks for apps built with AI</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Production readiness checks for apps built with AI on Next.js and Supabase: 59 checks across 7 areas, report in 5 working days.">
+<link rel="canonical" href="https://www.diegocastronuovo.com/collaudo/">
+<link rel="alternate" hreflang="en" href="https://www.diegocastronuovo.com/collaudo/">
+<link rel="alternate" hreflang="it" href="https://www.diegocastronuovo.com/collaudo/it/">
+<link rel="alternate" hreflang="fr" href="https://www.diegocastronuovo.com/collaudo/fr/">
+<link rel="alternate" hreflang="x-default" href="https://www.diegocastronuovo.com/collaudo/">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<style>
+/* Layout: paper, not dashboard. A narrow left rail holds section numbers and notes;
+   the content sits to its right. Serif for titles and text, sans for tables and navigation.
+   One light look only, whatever the system theme. */
+:root {
+  color-scheme: light;
+  --paper: #FCFBF8; --ink: #1B1A17; --muted: #625E56; --rule: #D9D5CC;
+  --accent: #103E96; --on-accent: #FFFFFF;
+  --rosso: #B3261E; --giallo: #8A5D00; --giallo-segno: #D99A00; --verde: #1E7A3C;
+  --serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--serif); font-size: 19px; line-height: 1.55; font-optical-sizing: auto; }
+h1, h2, h3, p, ul, ol, dl, dd, table, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.page { max-width: 1100px; margin-inline: auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+.row { display: grid; grid-template-columns: 9rem minmax(0, 1fr); column-gap: 3rem; }
+.rail { font-family: var(--sans); font-size: 13px; line-height: 1.45; color: var(--muted); }
+
+/* Testata: resta in alto mentre si scorre */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+[id] { scroll-margin-top: 88px; }
+.testata { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 9rem minmax(0, 1fr) auto; column-gap: 3rem; align-items: center; padding-block: 14px; }
+.lingue { display: inline-flex; gap: 12px; font-size: 13px; color: var(--muted); }
+.lingue a[aria-current] { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+.apri-menu { display: none; font-family: var(--sans); font-size: 14.5px; font-weight: 600; color: var(--ink); background: none; border: 1.5px solid var(--ink); padding: 8px 14px; cursor: pointer; }
+.bottone.piccolo { margin-top: 0; padding: 9.5px 14px; font-size: 14.5px; background: none; color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.bottone.piccolo:hover { background: var(--accent); color: var(--on-accent); }
+.marchio { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; color: var(--ink); text-decoration: none; }
+.testata nav { font-family: var(--sans); font-size: 15px; display: flex; flex-wrap: wrap; gap: 6px 28px; }
+.testata nav a { text-decoration: none; }
+.testata nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* Apertura */
+.apertura { padding-block: clamp(40px, 7vw, 92px) clamp(12px, 2vw, 24px); }
+.apertura .rail { padding-top: 14px; max-width: 8.5rem; }
+h1 { font-weight: 700; font-size: clamp(2.3rem, 5.2vw, 4rem); line-height: 1.05; letter-spacing: -0.012em; text-wrap: balance; }
+.spiega { font-size: 1.2rem; line-height: 1.5; max-width: 28em; margin-top: 28px; text-wrap: pretty; }
+.bottone { display: inline-block; margin-top: 32px; font-family: var(--sans); font-weight: 600; font-size: 16px; background: var(--accent); color: var(--on-accent); padding: 14px 22px; text-decoration: none; }
+.bottone:hover { background: var(--ink); color: var(--paper); }
+
+/* Sezioni */
+.sez { position: relative; padding-block: clamp(40px, 6vw, 72px); }
+.sez::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--rule); transform-origin: left; }
+.sez .numero { font-family: var(--serif); font-size: 2rem; line-height: 1.1; color: var(--ink); }
+.sez .nota { margin-top: 4px; }
+h2 { font-weight: 700; font-size: 2rem; line-height: 1.1; letter-spacing: -0.008em; text-wrap: balance; }
+h3 { font-weight: 700; font-size: 1.2rem; line-height: 1.3; }
+.attacco { max-width: 31em; margin-top: 14px; text-wrap: pretty; }
+.testo { max-width: 31em; margin-top: 22px; }
+.testo p { text-wrap: pretty; }
+.testo p + p { margin-top: 0.85em; }
+.fonte { color: var(--accent); text-underline-offset: 3px; }
+
+/* Immagini: una tavola sotto l'apertura, vignette nel margine */
+img { display: block; max-width: 100%; height: auto; }
+.tavola-riga { padding-block: 0 clamp(40px, 6vw, 72px); }
+.tavola-riga .rail { align-self: end; padding-bottom: 10px; max-width: 8.5rem; }
+.vignetta { width: 100%; max-width: 150px; margin-top: 22px; }
+/* Prova di carico: il ponte vuoto e, sopra, i camion posati sulla linea della strada */
+.tavola { position: relative; overflow: hidden; }
+.tavola .ponte { width: 100%; }
+.camion { position: absolute; left: 0.2%; right: 0.2%; bottom: 71.35%; display: flex; justify-content: space-between; align-items: flex-end;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 3% 97%, transparent); mask-image: linear-gradient(90deg, transparent, #000 3% 97%, transparent); }
+.camion img { width: 12.1%; }
+
+/* Tabelle */
+.tab { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 14.5px; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.tab th { text-align: left; font-weight: 500; font-size: 13px; color: var(--muted); padding: 9px 16px 9px 0; border-bottom: 1px solid var(--ink); white-space: nowrap; }
+.tab td { padding: 11px 16px 11px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.tab th:last-child, .tab td:last-child { padding-right: 0; }
+.tab .n { width: 2.4rem; color: var(--muted); }
+.tab .forte { font-weight: 600; }
+.tab .destra { text-align: right; }
+.tab .tenue { color: var(--muted); }
+.tab tfoot td { border-top: 1px solid var(--ink); border-bottom: 2px solid var(--ink); font-weight: 600; }
+.voto { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; white-space: nowrap; }
+.voto::before { content: ""; width: 9px; height: 9px; background: currentColor; }
+.voto.rosso { color: var(--rosso); }
+.voto.giallo { color: var(--giallo); }
+.voto.giallo::before { background: var(--giallo-segno); }
+.voto.verde { color: var(--verde); }
+
+/* Verbale */
+.verbale { padding-block: 0 clamp(48px, 7vw, 88px); }
+.intestazione { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 2px solid var(--ink); font-family: var(--sans); }
+.intestazione div { padding: 10px 16px 12px 0; }
+.intestazione dt { font-size: 13px; color: var(--muted); }
+.intestazione dd { margin-top: 2px; font-size: 14.5px; font-weight: 500; }
+.verbale .tab { border-top: 1px solid var(--ink); }
+
+/* 1. Fatti */
+.fatti { margin-top: 30px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); font-family: var(--sans); font-size: 14.5px; line-height: 1.45; }
+.fatto { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) 8.5rem; column-gap: 20px; padding: 14px 0; }
+.fatto + .fatto { border-top: 1px solid var(--rule); }
+.fatto .quando { color: var(--muted); }
+.fatto .dove { display: block; color: var(--ink); font-weight: 600; }
+.fatto .cosa { max-width: 34em; }
+.fatto .da { text-align: right; }
+
+/* 2. Aree */
+.aree { margin-top: 30px; border-top: 2px solid var(--ink); }
+.aree .nome { width: 13rem; font-weight: 600; }
+.aree .conta { width: 5.5rem; text-align: right; white-space: nowrap; }
+.aree .obiettivo p { max-width: 36em; }
+.aree details { margin-top: 8px; }
+.aree summary { cursor: pointer; color: var(--accent); font-size: 13.5px; }
+.esempi { margin-top: 6px; max-width: 36em; }
+.esempi li { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); padding: 6px 0; color: var(--muted); }
+.esempi b { color: var(--ink); font-weight: 600; }
+
+/* 3. Passi */
+.passi { margin-top: 30px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
+.passo { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); column-gap: 20px; padding: 18px 0; }
+.passo + .passo { border-top: 1px solid var(--rule); }
+.passo .quando { font-family: var(--sans); font-size: 14.5px; color: var(--muted); padding-top: 4px; }
+.passo p { max-width: 31em; margin-top: 4px; text-wrap: pretty; }
+
+/* 4. Listino */
+.listino { margin-top: 30px; border-top: 2px solid var(--ink); }
+.listino td { padding-block: 16px; }
+.listino .servizio b { display: block; font-size: 16px; font-weight: 600; }
+.listino .servizio span { display: block; margin-top: 3px; color: var(--muted); max-width: 30em; text-wrap: pretty; }
+.listino .durata { white-space: nowrap; color: var(--muted); }
+.listino .prezzo { text-align: right; white-space: nowrap; font-size: 17px; font-weight: 600; }
+.listino tbody tr:last-child td { border-bottom: 2px solid var(--ink); }
+
+/* 5. Elenco */
+.elenco { max-width: 31em; margin-top: 22px; }
+.elenco li { padding: 9px 0 9px 1.5em; position: relative; text-wrap: pretty; }
+.elenco li::before { content: "\2013"; position: absolute; left: 0; color: var(--muted); }
+.elenco li + li { border-top: 1px solid var(--rule); }
+
+/* 7. Domande */
+.domande { margin-top: 26px; display: grid; gap: 26px; max-width: 31em; }
+.domande p { margin-top: 6px; text-wrap: pretty; }
+
+/* 8. Contatto */
+.bozza { margin-top: 26px; max-width: 28em; border: 1px solid var(--ink); padding: 16px 20px 18px; font-family: var(--sans); font-size: 14.5px; line-height: 1.45; }
+.bozza b { display: block; font-weight: 600; margin-bottom: 4px; }
+
+/* Inviti a prenotare: uno dopo i prezzi, uno in chiusura (l'unico blocco di colore pieno) */
+.invito { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
+.invito .bottone { margin-top: 0; }
+.chiusura { background: var(--accent); color: var(--on-accent); padding: clamp(26px, 5vw, 56px); }
+.chiusura h2 { font-size: clamp(2rem, 4.2vw, 2.9rem); }
+.bottone.chiaro { background: var(--on-accent); color: var(--accent); }
+.bottone.chiaro:hover { background: var(--ink); color: var(--on-accent); }
+.chiusura .bozza { border-color: var(--on-accent); }
+
+.piede { border-top: 1px solid var(--rule); padding-block: 26px 44px; font-family: var(--sans); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; }
+
+/* Movimento: inchiostro e carta, niente rimbalzi. A riposo tutto è visibile;
+   le animazioni partono al caricamento o quando l'elemento entra nello schermo. */
+.bottone { transition: background-color .15s, color .15s; }
+@media (prefers-reduced-motion: no-preference) {
+  h1 .p { display: inline-block; animation: sale .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--i) * 45ms); }
+  .spiega { animation: sale .7s cubic-bezier(.2, .7, .2, 1) .7s both; }
+  html { scroll-behavior: smooth; }
+  .apertura .bottone { animation: sale .7s cubic-bezier(.2, .7, .2, 1) .85s both; }
+  @keyframes sale { from { opacity: 0; transform: translateY(0.35em); } to { opacity: 1; transform: none; } }
+
+  /* I camion entrano da destra uno alla volta, alla stessa velocità, e frenano al loro posto. */
+  .tavola.in-vista .camion img {
+    animation: arriva cubic-bezier(.25, .55, .3, 1) both;
+    animation-duration: calc((8.6 - var(--k) * 1.033) / 4.6 * 1s);
+    animation-delay: calc(1.1s + var(--k) * 0.55s);
+  }
+  @keyframes arriva { from { transform: translateX(calc((8.6 - var(--k) * 1.033) * 100%)); } to { transform: none; } }
+
+  .inchiostra.in-vista, .tavola.in-vista .ponte {
+    -webkit-mask-image: linear-gradient(90deg, #000 0 33.4%, transparent 43% 100%);
+    mask-image: linear-gradient(90deg, #000 0 33.4%, transparent 43% 100%);
+    -webkit-mask-size: 300% 100%; mask-size: 300% 100%;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    animation: inchiostro 1.9s cubic-bezier(.4, .1, .2, 1) both;
+  }
+  .vignetta.inchiostra.in-vista { animation-duration: 1.1s; }
+  @keyframes inchiostro { from { -webkit-mask-position: 100% 0; mask-position: 100% 0; } to { -webkit-mask-position: 0 0; mask-position: 0 0; } }
+
+  .verbale tbody tr:nth-child(1) { --r: 0; }
+  .verbale tbody tr:nth-child(2) { --r: 1; }
+  .verbale tbody tr:nth-child(3) { --r: 2; }
+  .verbale tbody tr:nth-child(4) { --r: 3; }
+  .verbale tbody tr:nth-child(5) { --r: 4; }
+  .verbale tbody tr:nth-child(6) { --r: 5; }
+  .verbale tbody tr:nth-child(7) { --r: 6; }
+  .verbale .in-vista tbody tr { animation: appare .45s ease-out both; animation-delay: calc(var(--r) * 150ms); }
+  .verbale .in-vista .voto { animation: timbro .4s cubic-bezier(.2, 1.4, .4, 1) both; animation-delay: calc(var(--r) * 150ms + 180ms); }
+  .verbale .in-vista tfoot tr { animation: appare .6s ease-out 1.35s both; }
+  @keyframes appare { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes timbro { from { opacity: 0; transform: scale(1.8); } to { opacity: 1; transform: none; } }
+
+  .sez.in-vista::before { animation: tratto 1.1s cubic-bezier(.3, .6, .2, 1) both; }
+  @keyframes tratto { from { transform: scaleX(0); } to { transform: none; } }
+}
+
+@media (max-width: 760px) {
+  body { font-size: 18px; }
+  .testata { grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 10px; padding-block: 10px; }
+  .testata nav { grid-column: 1 / -1; grid-row: 2; padding-top: 10px; }
+  .js .apri-menu { display: inline-block; }
+  .js .testata nav { display: none; }
+  .js .testata.aperta nav { display: grid; gap: 0; padding-top: 12px; }
+  .js .testata.aperta nav a { font-family: var(--serif); font-size: 1.15rem; padding: 12px 0; border-top: 1px solid var(--rule); }
+  .js .testata.aperta nav .lingue { gap: 22px; padding: 14px 0 4px; border-top: 1px solid var(--rule); }
+  .js .testata.aperta nav .lingue a { font-family: var(--sans); font-size: 15px; padding: 0; border: 0; }
+  .row { grid-template-columns: minmax(0, 1fr); row-gap: 10px; }
+  .apertura .rail { padding-top: 0; max-width: none; }
+  .sez .rail { display: flex; align-items: baseline; gap: 12px; }
+  .sez .numero { font-size: 1.5rem; }
+  .sez .nota { margin-top: 0; }
+  .sez .rail .vignetta { width: 64px; margin: 0 0 0 auto; align-self: center; }
+  .tavola-riga .rail { align-self: auto; padding-bottom: 0; max-width: none; }
+  .intestazione { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .verbale .n, .verbale .ctrl { display: none; }
+  .verbale .tab { font-size: 13.5px; }
+  .verbale .tab td, .verbale .tab th { padding-right: 10px; }
+
+  .fatto { grid-template-columns: minmax(0, 1fr); row-gap: 4px; }
+  .fatto .da { text-align: left; }
+  .passo { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+
+  .aree thead, .listino thead { display: none; }
+  .aree tr, .listino tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; padding-block: 13px; border-bottom: 1px solid var(--rule); }
+  .aree td, .listino td { border: 0; padding: 0; }
+  .aree .n { display: none; }
+  .aree .nome { grid-column: 1; grid-row: 1; width: auto; }
+  .aree .conta { grid-column: 2; grid-row: 1; width: auto; }
+  .aree .obiettivo { grid-column: 1 / -1; grid-row: 2; padding-top: 4px; }
+  .aree tfoot td { border: 0; }
+  .aree tfoot tr { border-bottom: 2px solid var(--ink); }
+  .listino .servizio { grid-column: 1 / -1; }
+  .listino .durata { padding-top: 8px; white-space: normal; }
+  .listino .prezzo { padding-top: 6px; }
+  .listino tbody tr:last-child td { border-bottom: 0; }
+  .listino tbody tr:last-child { border-bottom: 2px solid var(--ink); }
+}
+</style>
+</head>
+<body>
+<div class="page" id="inizio">
+  <script>document.documentElement.classList.add("js");</script>
+  <header class="testata">
+    <a class="marchio" href="#inizio">Collaudo</a>
+    <nav id="menu" aria-label="Sections">
+      <a href="#aree">What I check</a>
+      <a href="#metodo">How it works</a>
+      <a href="#prezzi">Pricing</a>
+      <a href="#contatto">Contact</a>
+      <span class="lingue"><a href="/collaudo/it/" hreflang="it">IT</a><a href="/collaudo/" aria-current="page">EN</a><a href="/collaudo/fr/" hreflang="fr">FR</a></span>
+    </nav>
+    <a class="bottone piccolo" href="#contatto">Book the check</a>
+    <button class="apri-menu" type="button" id="apri-menu" aria-expanded="false" aria-controls="menu" data-apri="Menu" data-chiudi="Close">Menu</button>
+  </header>
+
+  <main>
+    <div class="row apertura">
+      <p class="rail">For Next.js or React apps on Supabase, built with Claude Code, Cursor or Lovable.</p>
+      <div>
+        <h1><span class="p" style="--i:0">You</span> <span class="p" style="--i:1">built</span> <span class="p" style="--i:2">it</span> <span class="p" style="--i:3">with</span> <span class="p" style="--i:4">AI.</span> <span class="p" style="--i:5">Before</span> <span class="p" style="--i:6">customer</span> <span class="p" style="--i:7">data</span> <span class="p" style="--i:8">goes</span> <span class="p" style="--i:9">in,</span> <span class="p" style="--i:10">get</span> <span class="p" style="--i:11">it</span> <span class="p" style="--i:12">tested.</span></h1>
+        <p class="spiega">59 checks across 7 areas, from permissions to the AI agent. In 5 working days you know what is red and what to fix first.</p>
+        <a class="bottone" href="#contatto">Book the free check</a>
+      </div>
+    </div>
+
+    <div class="row tavola-riga">
+      <p class="rail">Load test. That is what collaudo means in Italian: a bridge is tested before it opens to traffic.</p>
+      <figure class="tavola oss">
+        <img class="ponte" src="/collaudo/img/ponte-vuoto.webp" width="1536" height="624" alt="Engraving of a bridge during a load test: a row of gravel trucks parked along the span and a surveying instrument on the riverbank">
+        <div class="camion" aria-hidden="true">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:0">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:1">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:2">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:3">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:4">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:5">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:6">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:7">
+        </div>
+      </figure>
+    </div>
+
+    <div class="row verbale">
+      <p class="rail">Sample report.<br>Made-up data.</p>
+      <figure>
+        <dl class="intestazione">
+          <div><dt>Document</dt><dd>Test report</dd></div>
+          <div><dt>Application</dt><dd>Booking manager</dd></div>
+          <div><dt>Stack</dt><dd>Next.js and Supabase</dd></div>
+          <div><dt>Checks run</dt><dd>59, across 7 areas</dd></div>
+        </dl>
+        <table class="tab oss">
+          <thead>
+            <tr><th class="n">No.</th><th>Area</th><th>Rating</th><th>Main finding</th><th class="destra ctrl">Check</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="n">1</td><td class="forte">Data and permissions</td><td><span class="voto rosso">Red</span></td><td>One customer can read another customer's bookings</td><td class="destra tenue ctrl">1.3</td></tr>
+            <tr><td class="n">2</td><td class="forte">Schema and migrations</td><td><span class="voto rosso">Red</span></td><td>The database cannot be rebuilt from the repository</td><td class="destra tenue ctrl">2.1</td></tr>
+            <tr><td class="n">3</td><td class="forte">CI and tests</td><td><span class="voto giallo">Amber</span></td><td>No tests on payments</td><td class="destra tenue ctrl">3.3</td></tr>
+            <tr><td class="n">4</td><td class="forte">Environments</td><td><span class="voto giallo">Amber</span></td><td>Staging sends emails to real customers</td><td class="destra tenue ctrl">4.2</td></tr>
+            <tr><td class="n">5</td><td class="forte">Observability</td><td><span class="voto giallo">Amber</span></td><td>Errors are reported by customers</td><td class="destra tenue ctrl">5.2</td></tr>
+            <tr><td class="n">6</td><td class="forte">Backups, secrets and GDPR</td><td><span class="voto rosso">Red</span></td><td>Backups on, restore never tested</td><td class="destra tenue ctrl">6.1</td></tr>
+            <tr><td class="n">7</td><td class="forte">AI agent</td><td><span class="voto verde">Green</span></td><td>Written rules, destructive commands blocked</td><td class="destra tenue ctrl">7.4</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td class="n"></td><td>Outcome</td><td colspan="3">Not ready for real data: 3 areas red, 3 amber, 1 green</td></tr>
+          </tfoot>
+        </table>
+      </figure>
+    </div>
+
+    <section class="row sez oss">
+      <div class="rail">
+        <p class="numero">1</p>
+        <p class="nota">Public incidents, each with its source.</p>
+        <img class="vignetta oss inchiostra" src="/collaudo/img/lucchetto.webp" width="340" height="205" alt="">
+      </div>
+      <div>
+        <h2>It has already happened</h2>
+        <p class="attacco">Three incidents involving apps built with AI tools. None of them took a sophisticated attack.</p>
+        <div class="fatti">
+          <div class="fatto">
+            <p class="quando"><span class="dove">Lovable</span>May 2025</p>
+            <p class="cosa">A scan of 1,645 showcased apps found 170 with data anyone could read, because database permissions were missing or weak (CVE-2025-48757).</p>
+            <p class="da"><a class="fonte" href="https://www.superblocks.com/blog/lovable-rls-breach">Superblocks</a></p>
+          </div>
+          <div class="fatto">
+            <p class="quando"><span class="dove">Replit</span>July 2025</p>
+            <p class="cosa">An AI agent deleted SaaStr's production database during a code freeze.</p>
+            <p class="da"><a class="fonte" href="https://www.techtarget.com/searchsoftwarequality/news/366627829/Replit-AI-agent-snafu-shot-across-the-bow-for-vibe-coding">TechTarget</a></p>
+          </div>
+          <div class="fatto">
+            <p class="quando"><span class="dove">Base44</span>July 2025</p>
+            <p class="cosa">Knowing a private app's public ID was enough to get in. The flaw was fixed within 24 hours.</p>
+            <p class="da"><a class="fonte" href="https://wiz.io/blog/critical-vulnerability-base44">Wiz Research</a></p>
+          </div>
+        </div>
+        <div class="testo">
+          <p>Automated scanners check that permissions exist. Whether they are right for your app only shows when you try them with real users, one per role.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="aree">
+      <div class="rail">
+        <p class="numero">2</p>
+        <p class="nota">59 checks, 13 of them blocking.</p>
+        <img class="vignetta oss inchiostra" src="/collaudo/img/lente.webp" width="276" height="340" alt="">
+      </div>
+      <div>
+        <h2>What I check</h2>
+        <p class="attacco">Every check passes or fails. If a blocking check fails, the area is red.</p>
+        <table class="tab aree">
+          <thead>
+            <tr><th class="n">No.</th><th>Area</th><th>Goal</th><th class="destra">Checks</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="n">1</td><td class="nome">Data and permissions</td>
+              <td class="obiettivo"><p>No user can read or change data that isn't theirs, not even by calling the database directly.</p>
+                <details><summary>Three sample checks</summary><ul class="esempi">
+                  <li><span>1.3</span><span><b>Isolation between customers.</b> Two users from two different customers try to read and write every table. Passes if neither sees the other's data.</span></li>
+                  <li><span>1.4</span><span><b>What can be read without logging in.</b> I call every table with the public key only. Passes if only intentionally public data comes back.</span></li>
+                  <li><span>1.6</span><span><b>Where the admin role comes from.</b> Passes if a user cannot grant it to themselves.</span></li>
+                </ul></details></td>
+              <td class="conta">10</td>
+            </tr>
+            <tr>
+              <td class="n">2</td><td class="nome">Schema and migrations</td>
+              <td class="obiettivo"><p>The production database can be rebuilt from the repository, and every change goes through a versioned file.</p>
+                <details><summary>Three sample checks</summary><ul class="esempi">
+                  <li><span>2.1</span><span><b>Versioned schema.</b> I rebuild the database from scratch and compare it with production. Passes if there are no differences.</span></li>
+                  <li><span>2.3</span><span><b>No manual changes.</b> Passes if only the release pipeline applies schema changes.</span></li>
+                  <li><span>2.4</span><span><b>Destructive changes.</b> Passes if each one has a backup taken beforehand and a written rollback step.</span></li>
+                </ul></details></td>
+              <td class="conta">8</td>
+            </tr>
+            <tr>
+              <td class="n">3</td><td class="nome">CI and tests</td>
+              <td class="obiettivo"><p>Nothing reaches production without automated checks that test behaviour.</p>
+                <details><summary>Three sample checks</summary><ul class="esempi">
+                  <li><span>3.1</span><span><b>Permission tests.</b> Passes if a change that exposes one customer's data to another is blocked automatically.</span></li>
+                  <li><span>3.3</span><span><b>Flows that move money or data.</b> Payment, the same notification received twice, two bookings at the same instant.</span></li>
+                  <li><span>3.5</span><span><b>Secret scanning.</b> Passes if a commit containing a key is rejected.</span></li>
+                </ul></details></td>
+              <td class="conta">8</td>
+            </tr>
+            <tr>
+              <td class="n">4</td><td class="nome">Environments</td>
+              <td class="obiettivo"><p>You can try a change without touching customer data, and roll back in minutes.</p>
+                <details><summary>Three sample checks</summary><ul class="esempi">
+                  <li><span>4.1</span><span><b>Separate previews.</b> Passes if no preview uses the production database.</span></li>
+                  <li><span>4.2</span><span><b>External services in test mode.</b> Passes if the test environment cannot charge a real card or message a real customer.</span></li>
+                  <li><span>4.4</span><span><b>Rollback to the previous version.</b> Tried once, timed. Passes if it takes less than 10 minutes.</span></li>
+                </ul></details></td>
+              <td class="conta">6</td>
+            </tr>
+            <tr>
+              <td class="n">5</td><td class="nome">Observability</td>
+              <td class="obiettivo"><p>A problem reaches you before a customer reports it.</p>
+                <details><summary>Three sample checks</summary><ul class="esempi">
+                  <li><span>5.1</span><span><b>Errors tracked everywhere.</b> I trigger a test error from the browser, the server and a scheduled job. Passes if all three show up.</span></li>
+                  <li><span>5.2</span><span><b>Errors reach a person.</b> Passes if the alert arrives within 5 minutes on a channel someone reads.</span></li>
+                  <li><span>5.3</span><span><b>Monitoring from outside.</b> Login, main functions and payments checked from outside at least every 5 minutes.</span></li>
+                </ul></details></td>
+              <td class="conta">8</td>
+            </tr>
+            <tr>
+              <td class="n">6</td><td class="nome">Backups, secrets and GDPR</td>
+              <td class="obiettivo"><p>Data can be recovered, keys don't leak, and every piece of personal data has an expiry.</p>
+                <details><summary>Three sample checks</summary><ul class="esempi">
+                  <li><span>6.1</span><span><b>Restore tested.</b> I restore the latest backup to a separate project and time it. A backup that has never been restored doesn't count.</span></li>
+                  <li><span>6.2</span><span><b>Privileged keys.</b> Passes if no full-access key can be reached from the browser.</span></li>
+                  <li><span>6.7</span><span><b>Personal data expiry.</b> Passes if every table has a written retention period and an automatic deletion that works.</span></li>
+                </ul></details></td>
+              <td class="conta">11</td>
+            </tr>
+            <tr>
+              <td class="n">7</td><td class="nome">AI agent</td>
+              <td class="obiettivo"><p>The agent writing the code works within the limits of a developer who has just joined.</p>
+                <details><summary>Three sample checks</summary><ul class="esempi">
+                  <li><span>7.1</span><span><b>No production keys for the agent.</b> Passes if the agent cannot write to the customers' database.</span></li>
+                  <li><span>7.4</span><span><b>Destructive commands blocked.</b> I try a forbidden command. Passes if the tool stops it.</span></li>
+                  <li><span>7.5</span><span><b>Changes only with green checks.</b> Passes if the last 20 releases all went through the automated checks.</span></li>
+                </ul></details></td>
+              <td class="conta">8</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><td class="n"></td><td class="nome">Total</td><td class="obiettivo"></td><td class="conta">59</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="metodo">
+      <div class="rail">
+        <p class="numero">3</p>
+        <p class="nota">Working days.</p>
+        <img class="vignetta oss inchiostra" src="/collaudo/img/clessidra.webp" width="340" height="248" alt="">
+      </div>
+      <div>
+        <h2>Five days, from access to report</h2>
+        <p class="attacco">The audit reads and changes nothing. You can keep developing while I work.</p>
+        <ol class="passi">
+          <li class="passo"><p class="quando">Day 0</p><div><h3>Kickoff</h3><p>A 30-minute call. You give me read-only access to the repo and the database. We sign a confidentiality agreement and a data processing agreement.</p></div></li>
+          <li class="passo"><p class="quando">Days 1, 2 and 3</p><div><h3>Analysis</h3><p>I run the 59 checks with automated scripts and manual review. I try the permissions with test users, one per role and per customer.</p></div></li>
+          <li class="passo"><p class="quando">Day 4</p><div><h3>Report</h3><p>A rating for each of the 7 areas, the 10 most serious problems in order, and an estimate for fixing them.</p></div></li>
+          <li class="passo"><p class="quando">Day 5</p><div><h3>Final call</h3><p>One hour to go through the report together. If you want to continue, you get a fixed price for the hardening.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="prezzi">
+      <div class="rail">
+        <p class="numero">4</p>
+        <p class="nota">Prices in euros.</p>
+        <img class="vignetta oss inchiostra" src="/collaudo/img/bilancia.webp" width="340" height="319" alt="">
+      </div>
+      <div>
+        <h2>Pricing</h2>
+        <p class="attacco">Fixed price, agreed before we start.</p>
+        <table class="tab listino">
+          <thead>
+            <tr><th>Service</th><th>Duration</th><th class="destra">Price</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="servizio"><b>Check</b><span>You show me the app on a video call. I tell you which areas I would look at first and whether you really need the audit.</span></td><td class="durata">30 minutes</td><td class="prezzo">€0</td></tr>
+            <tr><td class="servizio"><b>Audit</b><span>A report with the rating of the 7 areas, the 10 most serious problems and the final call. If you go on to the hardening, I deduct it from the price.</span></td><td class="durata">5 working days</td><td class="prezzo">€790</td></tr>
+            <tr><td class="servizio"><b>Hardening</b><span>I bring every area to green with changes you can read and approve one by one. At the end you have automated checks, a test environment, monitoring and a tested restore.</span></td><td class="durata">2 or 3 weeks</td><td class="prezzo">from €2,500</td></tr>
+            <tr><td class="servizio"><b>Maintenance</b><span>Monthly review of database changes and releases, a test restore every three months, critical updates.</span></td><td class="durata">Monthly, cancel any time</td><td class="prezzo">from €250 per month</td></tr>
+          </tbody>
+        </table>
+        <p class="invito">It starts with the check: 30 minutes, free. <a class="bottone" href="#contatto">Book the free check</a></p>
+      </div>
+    </section>
+
+    <section class="row sez oss">
+      <div class="rail"><p class="numero">5</p></div>
+      <div>
+        <h2>What I don't do</h2>
+        <ul class="elenco">
+          <li>New features or rewrites of the app.</li>
+          <li>Certifications such as ISO 27001 or SOC 2.</li>
+          <li>Legal advice on the GDPR. The technical side, yes: data retention, deletion, access.</li>
+          <li>24/7 on-call.</li>
+          <li>Apps without a GitHub repository, or on stacks other than Next.js or React with Supabase.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="row sez oss">
+      <div class="rail"><p class="numero">6</p></div>
+      <div>
+        <h2>About me</h2>
+        <div class="testo">
+          <p>I'm Diego Castronuovo, a platform engineer. My job is keeping production systems running: Kubernetes, Terraform, PostgreSQL, release pipelines, monitoring.</p>
+          <p>I work with AI agents like Claude Code every day. I know what they do well and where they need limits that don't depend on their attention.</p>
+          <p>Collaudo grew out of a review of a business app built almost entirely with an AI agent: the product worked, the safety nets were missing.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="row sez oss">
+      <div class="rail"><p class="numero">7</p></div>
+      <div>
+        <h2>Frequently asked questions</h2>
+        <div class="domande">
+          <div><h3>Do I have to give you access to production?</h3><p>Read-only and time-limited. Before starting we sign a confidentiality agreement and the data processing agreement the GDPR requires. When the work is done you revoke the access.</p></div>
+          <div><h3>I used Lovable. Is that still fine?</h3><p>Yes, if the project is connected to GitHub and uses Supabase. Database, permissions and backups are the same as in an app written with Claude Code or Cursor.</p></div>
+          <div><h3>Do I have to stop developing during the audit?</h3><p>No. The audit reads code and configuration and changes nothing.</p></div>
+          <div><h3>What changes for me after the hardening?</h3><p>You keep building with your agent. The rules and checks stay in the repository: if a change exposes one customer's data to another, it is stopped before it reaches production.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="contatto">
+      <div class="rail"><p class="numero">8</p></div>
+      <div class="chiusura">
+        <h2>Start with the free check.</h2>
+        <p class="attacco">30 minutes on a video call. You show me the app and I tell you which areas I would look at first.</p>
+        <a class="bottone chiaro" href="#contatto">Book the free check</a>
+        <div class="bozza">
+          <b>Draft</b>
+          The button above isn't connected yet: the calendar link and the email address are missing.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="piede">
+    <span>Collaudo, by Diego Castronuovo</span>
+    <span>Production readiness checks for apps built with AI</span>
+  </footer>
+</div>
+
+<script>
+// Marks an element once it enters the screen, so its one-time animation can play.
+// Without this script, or with reduced motion, everything simply stays visible.
+(function () {
+  if (!("IntersectionObserver" in window)) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add("in-vista"); io.unobserve(e.target); }
+    });
+  }, { rootMargin: "0px 0px -10% 0px" });
+  document.querySelectorAll(".oss").forEach(function (el) { io.observe(el); });
+})();
+
+// Phone menu: the "Menu" button opens and closes the list of sections.
+(function () {
+  var testata = document.querySelector(".testata");
+  var bottone = document.getElementById("apri-menu");
+  if (!testata || !bottone) return;
+  function imposta(aperta) {
+    testata.classList.toggle("aperta", aperta);
+    bottone.setAttribute("aria-expanded", aperta ? "true" : "false");
+    bottone.textContent = aperta ? bottone.dataset.chiudi : bottone.dataset.apri;
+  }
+  bottone.addEventListener("click", function () { imposta(!testata.classList.contains("aperta")); });
+  testata.querySelectorAll("nav a").forEach(function (a) { a.addEventListener("click", function () { imposta(false); }); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") imposta(false); });
+})();
+</script>
+</body>
+</html>

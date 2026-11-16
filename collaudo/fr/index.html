@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collaudo | Vérification de mise en production pour les applications construites avec l'IA</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Vérification de mise en production pour les applications construites avec l&#x27;IA sur Next.js et Supabase : 59 contrôles sur 7 domaines, rapport en 5 jours ouvrés.">
+<link rel="canonical" href="https://www.diegocastronuovo.com/collaudo/fr/">
+<link rel="alternate" hreflang="en" href="https://www.diegocastronuovo.com/collaudo/">
+<link rel="alternate" hreflang="it" href="https://www.diegocastronuovo.com/collaudo/it/">
+<link rel="alternate" hreflang="fr" href="https://www.diegocastronuovo.com/collaudo/fr/">
+<link rel="alternate" hreflang="x-default" href="https://www.diegocastronuovo.com/collaudo/">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<style>
+/* Layout: paper, not dashboard. A narrow left rail holds section numbers and notes;
+   the content sits to its right. Serif for titles and text, sans for tables and navigation.
+   One light look only, whatever the system theme. */
+:root {
+  color-scheme: light;
+  --paper: #FCFBF8; --ink: #1B1A17; --muted: #625E56; --rule: #D9D5CC;
+  --accent: #103E96; --on-accent: #FFFFFF;
+  --rosso: #B3261E; --giallo: #8A5D00; --giallo-segno: #D99A00; --verde: #1E7A3C;
+  --serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--serif); font-size: 19px; line-height: 1.55; font-optical-sizing: auto; }
+h1, h2, h3, p, ul, ol, dl, dd, table, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.page { max-width: 1100px; margin-inline: auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+.row { display: grid; grid-template-columns: 9rem minmax(0, 1fr); column-gap: 3rem; }
+.rail { font-family: var(--sans); font-size: 13px; line-height: 1.45; color: var(--muted); }
+
+/* Testata: resta in alto mentre si scorre */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+[id] { scroll-margin-top: 88px; }
+.testata { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 9rem minmax(0, 1fr) auto; column-gap: 3rem; align-items: center; padding-block: 14px; }
+.lingue { display: inline-flex; gap: 12px; font-size: 13px; color: var(--muted); }
+.lingue a[aria-current] { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+.apri-menu { display: none; font-family: var(--sans); font-size: 14.5px; font-weight: 600; color: var(--ink); background: none; border: 1.5px solid var(--ink); padding: 8px 14px; cursor: pointer; }
+.bottone.piccolo { margin-top: 0; padding: 9.5px 14px; font-size: 14.5px; background: none; color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.bottone.piccolo:hover { background: var(--accent); color: var(--on-accent); }
+.marchio { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; color: var(--ink); text-decoration: none; }
+.testata nav { font-family: var(--sans); font-size: 15px; display: flex; flex-wrap: wrap; gap: 6px 28px; }
+.testata nav a { text-decoration: none; }
+.testata nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* Apertura */
+.apertura { padding-block: clamp(40px, 7vw, 92px) clamp(12px, 2vw, 24px); }
+.apertura .rail { padding-top: 14px; max-width: 8.5rem; }
+h1 { font-weight: 700; font-size: clamp(2.3rem, 5.2vw, 4rem); line-height: 1.05; letter-spacing: -0.012em; text-wrap: balance; }
+.spiega { font-size: 1.2rem; line-height: 1.5; max-width: 28em; margin-top: 28px; text-wrap: pretty; }
+.bottone { display: inline-block; margin-top: 32px; font-family: var(--sans); font-weight: 600; font-size: 16px; background: var(--accent); color: var(--on-accent); padding: 14px 22px; text-decoration: none; }
+.bottone:hover { background: var(--ink); color: var(--paper); }
+
+/* Sezioni */
+.sez { position: relative; padding-block: clamp(40px, 6vw, 72px); }
+.sez::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--rule); transform-origin: left; }
+.sez .numero { font-family: var(--serif); font-size: 2rem; line-height: 1.1; color: var(--ink); }
+.sez .nota { margin-top: 4px; }
+h2 { font-weight: 700; font-size: 2rem; line-height: 1.1; letter-spacing: -0.008em; text-wrap: balance; }
+h3 { font-weight: 700; font-size: 1.2rem; line-height: 1.3; }
+.attacco { max-width: 31em; margin-top: 14px; text-wrap: pretty; }
+.testo { max-width: 31em; margin-top: 22px; }
+.testo p { text-wrap: pretty; }
+.testo p + p { margin-top: 0.85em; }
+.fonte { color: var(--accent); text-underline-offset: 3px; }
+
+/* Immagini: una tavola sotto l'apertura, vignette nel margine */
+img { display: block; max-width: 100%; height: auto; }
+.tavola-riga { padding-block: 0 clamp(40px, 6vw, 72px); }
+.tavola-riga .rail { align-self: end; padding-bottom: 10px; max-width: 8.5rem; }
+.vignetta { width: 100%; max-width: 150px; margin-top: 22px; }
+/* Prova di carico: il ponte vuoto e, sopra, i camion posati sulla linea della strada */
+.tavola { position: relative; overflow: hidden; }
+.tavola .ponte { width: 100%; }
+.camion { position: absolute; left: 0.2%; right: 0.2%; bottom: 71.35%; display: flex; justify-content: space-between; align-items: flex-end;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 3% 97%, transparent); mask-image: linear-gradient(90deg, transparent, #000 3% 97%, transparent); }
+.camion img { width: 12.1%; }
+
+/* Tabelle */
+.tab { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 14.5px; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.tab th { text-align: left; font-weight: 500; font-size: 13px; color: var(--muted); padding: 9px 16px 9px 0; border-bottom: 1px solid var(--ink); white-space: nowrap; }
+.tab td { padding: 11px 16px 11px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.tab th:last-child, .tab td:last-child { padding-right: 0; }
+.tab .n { width: 2.4rem; color: var(--muted); }
+.tab .forte { font-weight: 600; }
+.tab .destra { text-align: right; }
+.tab .tenue { color: var(--muted); }
+.tab tfoot td { border-top: 1px solid var(--ink); border-bottom: 2px solid var(--ink); font-weight: 600; }
+.voto { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; white-space: nowrap; }
+.voto::before { content: ""; width: 9px; height: 9px; background: currentColor; }
+.voto.rosso { color: var(--rosso); }
+.voto.giallo { color: var(--giallo); }
+.voto.giallo::before { background: var(--giallo-segno); }
+.voto.verde { color: var(--verde); }
+
+/* Verbale */
+.verbale { padding-block: 0 clamp(48px, 7vw, 88px); }
+.intestazione { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 2px solid var(--ink); font-family: var(--sans); }
+.intestazione div { padding: 10px 16px 12px 0; }
+.intestazione dt { font-size: 13px; color: var(--muted); }
+.intestazione dd { margin-top: 2px; font-size: 14.5px; font-weight: 500; }
+.verbale .tab { border-top: 1px solid var(--ink); }
+
+/* 1. Fatti */
+.fatti { margin-top: 30px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); font-family: var(--sans); font-size: 14.5px; line-height: 1.45; }
+.fatto { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) 8.5rem; column-gap: 20px; padding: 14px 0; }
+.fatto + .fatto { border-top: 1px solid var(--rule); }
+.fatto .quando { color: var(--muted); }
+.fatto .dove { display: block; color: var(--ink); font-weight: 600; }
+.fatto .cosa { max-width: 34em; }
+.fatto .da { text-align: right; }
+
+/* 2. Aree */
+.aree { margin-top: 30px; border-top: 2px solid var(--ink); }
+.aree .nome { width: 13rem; font-weight: 600; }
+.aree .conta { width: 5.5rem; text-align: right; white-space: nowrap; }
+.aree .obiettivo p { max-width: 36em; }
+.aree details { margin-top: 8px; }
+.aree summary { cursor: pointer; color: var(--accent); font-size: 13.5px; }
+.esempi { margin-top: 6px; max-width: 36em; }
+.esempi li { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); padding: 6px 0; color: var(--muted); }
+.esempi b { color: var(--ink); font-weight: 600; }
+
+/* 3. Passi */
+.passi { margin-top: 30px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
+.passo { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); column-gap: 20px; padding: 18px 0; }
+.passo + .passo { border-top: 1px solid var(--rule); }
+.passo .quando { font-family: var(--sans); font-size: 14.5px; color: var(--muted); padding-top: 4px; }
+.passo p { max-width: 31em; margin-top: 4px; text-wrap: pretty; }
+
+/* 4. Listino */
+.listino { margin-top: 30px; border-top: 2px solid var(--ink); }
+.listino td { padding-block: 16px; }
+.listino .servizio b { display: block; font-size: 16px; font-weight: 600; }
+.listino .servizio span { display: block; margin-top: 3px; color: var(--muted); max-width: 30em; text-wrap: pretty; }
+.listino .durata { white-space: nowrap; color: var(--muted); }
+.listino .prezzo { text-align: right; white-space: nowrap; font-size: 17px; font-weight: 600; }
+.listino tbody tr:last-child td { border-bottom: 2px solid var(--ink); }
+
+/* 5. Elenco */
+.elenco { max-width: 31em; margin-top: 22px; }
+.elenco li { padding: 9px 0 9px 1.5em; position: relative; text-wrap: pretty; }
+.elenco li::before { content: "\2013"; position: absolute; left: 0; color: var(--muted); }
+.elenco li + li { border-top: 1px solid var(--rule); }
+
+/* 7. Domande */
+.domande { margin-top: 26px; display: grid; gap: 26px; max-width: 31em; }
+.domande p { margin-top: 6px; text-wrap: pretty; }
+
+/* 8. Contatto */
+.bozza { margin-top: 26px; max-width: 28em; border: 1px solid var(--ink); padding: 16px 20px 18px; font-family: var(--sans); font-size: 14.5px; line-height: 1.45; }
+.bozza b { display: block; font-weight: 600; margin-bottom: 4px; }
+
+/* Inviti a prenotare: uno dopo i prezzi, uno in chiusura (l'unico blocco di colore pieno) */
+.invito { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
+.invito .bottone { margin-top: 0; }
+.chiusura { background: var(--accent); color: var(--on-accent); padding: clamp(26px, 5vw, 56px); }
+.chiusura h2 { font-size: clamp(2rem, 4.2vw, 2.9rem); }
+.bottone.chiaro { background: var(--on-accent); color: var(--accent); }
+.bottone.chiaro:hover { background: var(--ink); color: var(--on-accent); }
+.chiusura .bozza { border-color: var(--on-accent); }
+
+.piede { border-top: 1px solid var(--rule); padding-block: 26px 44px; font-family: var(--sans); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; }
+
+/* Movimento: inchiostro e carta, niente rimbalzi. A riposo tutto è visibile;
+   le animazioni partono al caricamento o quando l'elemento entra nello schermo. */
+.bottone { transition: background-color .15s, color .15s; }
+@media (prefers-reduced-motion: no-preference) {
+  h1 .p { display: inline-block; animation: sale .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--i) * 45ms); }
+  .spiega { animation: sale .7s cubic-bezier(.2, .7, .2, 1) .7s both; }
+  html { scroll-behavior: smooth; }
+  .apertura .bottone { animation: sale .7s cubic-bezier(.2, .7, .2, 1) .85s both; }
+  @keyframes sale { from { opacity: 0; transform: translateY(0.35em); } to { opacity: 1; transform: none; } }
+
+  /* I camion entrano da destra uno alla volta, alla stessa velocità, e frenano al loro posto. */
+  .tavola.in-vista .camion img {
+    animation: arriva cubic-bezier(.25, .55, .3, 1) both;
+    animation-duration: calc((8.6 - var(--k) * 1.033) / 4.6 * 1s);
+    animation-delay: calc(1.1s + var(--k) * 0.55s);
+  }
+  @keyframes arriva { from { transform: translateX(calc((8.6 - var(--k) * 1.033) * 100%)); } to { transform: none; } }
+
+  .inchiostra.in-vista, .tavola.in-vista .ponte {
+    -webkit-mask-image: linear-gradient(90deg, #000 0 33.4%, transparent 43% 100%);
+    mask-image: linear-gradient(90deg, #000 0 33.4%, transparent 43% 100%);
+    -webkit-mask-size: 300% 100%; mask-size: 300% 100%;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    animation: inchiostro 1.9s cubic-bezier(.4, .1, .2, 1) both;
+  }
+  .vignetta.inchiostra.in-vista { animation-duration: 1.1s; }
+  @keyframes inchiostro { from { -webkit-mask-position: 100% 0; mask-position: 100% 0; } to { -webkit-mask-position: 0 0; mask-position: 0 0; } }
+
+  .verbale tbody tr:nth-child(1) { --r: 0; }
+  .verbale tbody tr:nth-child(2) { --r: 1; }
+  .verbale tbody tr:nth-child(3) { --r: 2; }
+  .verbale tbody tr:nth-child(4) { --r: 3; }
+  .verbale tbody tr:nth-child(5) { --r: 4; }
+  .verbale tbody tr:nth-child(6) { --r: 5; }
+  .verbale tbody tr:nth-child(7) { --r: 6; }
+  .verbale .in-vista tbody tr { animation: appare .45s ease-out both; animation-delay: calc(var(--r) * 150ms); }
+  .verbale .in-vista .voto { animation: timbro .4s cubic-bezier(.2, 1.4, .4, 1) both; animation-delay: calc(var(--r) * 150ms + 180ms); }
+  .verbale .in-vista tfoot tr { animation: appare .6s ease-out 1.35s both; }
+  @keyframes appare { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes timbro { from { opacity: 0; transform: scale(1.8); } to { opacity: 1; transform: none; } }
+
+  .sez.in-vista::before { animation: tratto 1.1s cubic-bezier(.3, .6, .2, 1) both; }
+  @keyframes tratto { from { transform: scaleX(0); } to { transform: none; } }
+}
+
+@media (max-width: 760px) {
+  body { font-size: 18px; }
+  .testata { grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 10px; padding-block: 10px; }
+  .testata nav { grid-column: 1 / -1; grid-row: 2; padding-top: 10px; }
+  .js .apri-menu { display: inline-block; }
+  .js .testata nav { display: none; }
+  .js .testata.aperta nav { display: grid; gap: 0; padding-top: 12px; }
+  .js .testata.aperta nav a { font-family: var(--serif); font-size: 1.15rem; padding: 12px 0; border-top: 1px solid var(--rule); }
+  .js .testata.aperta nav .lingue { gap: 22px; padding: 14px 0 4px; border-top: 1px solid var(--rule); }
+  .js .testata.aperta nav .lingue a { font-family: var(--sans); font-size: 15px; padding: 0; border: 0; }
+  .row { grid-template-columns: minmax(0, 1fr); row-gap: 10px; }
+  .apertura .rail { padding-top: 0; max-width: none; }
+  .sez .rail { display: flex; align-items: baseline; gap: 12px; }
+  .sez .numero { font-size: 1.5rem; }
+  .sez .nota { margin-top: 0; }
+  .sez .rail .vignetta { width: 64px; margin: 0 0 0 auto; align-self: center; }
+  .tavola-riga .rail { align-self: auto; padding-bottom: 0; max-width: none; }
+  .intestazione { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .verbale .n, .verbale .ctrl { display: none; }
+  .verbale .tab { font-size: 13.5px; }
+  .verbale .tab td, .verbale .tab th { padding-right: 10px; }
+
+  .fatto { grid-template-columns: minmax(0, 1fr); row-gap: 4px; }
+  .fatto .da { text-align: left; }
+  .passo { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+
+  .aree thead, .listino thead { display: none; }
+  .aree tr, .listino tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; padding-block: 13px; border-bottom: 1px solid var(--rule); }
+  .aree td, .listino td { border: 0; padding: 0; }
+  .aree .n { display: none; }
+  .aree .nome { grid-column: 1; grid-row: 1; width: auto; }
+  .aree .conta { grid-column: 2; grid-row: 1; width: auto; }
+  .aree .obiettivo { grid-column: 1 / -1; grid-row: 2; padding-top: 4px; }
+  .aree tfoot td { border: 0; }
+  .aree tfoot tr { border-bottom: 2px solid var(--ink); }
+  .listino .servizio { grid-column: 1 / -1; }
+  .listino .durata { padding-top: 8px; white-space: normal; }
+  .listino .prezzo { padding-top: 6px; }
+  .listino tbody tr:last-child td { border-bottom: 0; }
+  .listino tbody tr:last-child { border-bottom: 2px solid var(--ink); }
+}
+</style>
+</head>
+<body>
+<div class="page" id="inizio">
+  <script>document.documentElement.classList.add("js");</script>
+  <header class="testata">
+    <a class="marchio" href="#inizio">Collaudo</a>
+    <nav id="menu" aria-label="Rubriques">
+      <a href="#aree">Ce que je contrôle</a>
+      <a href="#metodo">Comment ça marche</a>
+      <a href="#prezzi">Tarifs</a>
+      <a href="#contatto">Contact</a>
+      <span class="lingue"><a href="/collaudo/it/" hreflang="it">IT</a><a href="/collaudo/" hreflang="en">EN</a><a href="/collaudo/fr/" aria-current="page">FR</a></span>
+    </nav>
+    <a class="bottone piccolo" href="#contatto">Réserver l'appel</a>
+    <button class="apri-menu" type="button" id="apri-menu" aria-expanded="false" aria-controls="menu" data-apri="Menu" data-chiudi="Fermer">Menu</button>
+  </header>
+
+  <main>
+    <div class="row apertura">
+      <p class="rail">Pour les applications Next.js ou React sur Supabase, construites avec Claude Code, Cursor ou Lovable.</p>
+      <div>
+        <h1><span class="p" style="--i:0">Vous</span> <span class="p" style="--i:1">l'avez</span> <span class="p" style="--i:2">construite</span> <span class="p" style="--i:3">avec</span> <span class="p" style="--i:4">l'IA.</span> <span class="p" style="--i:5">Avant</span> <span class="p" style="--i:6">d'y</span> <span class="p" style="--i:7">mettre</span> <span class="p" style="--i:8">les</span> <span class="p" style="--i:9">données</span> <span class="p" style="--i:10">de</span> <span class="p" style="--i:11">vos</span> <span class="p" style="--i:12">clients,</span> <span class="p" style="--i:13">faites-la</span> <span class="p" style="--i:14">vérifier.</span></h1>
+        <p class="spiega">59 contrôles sur 7 domaines, des permissions à l'agent IA. En 5 jours ouvrés, vous savez ce qui est rouge et quoi corriger en premier.</p>
+        <a class="bottone" href="#contatto">Réserver l'appel gratuit</a>
+      </div>
+    </div>
+
+    <div class="row tavola-riga">
+      <p class="rail">Épreuve de charge. C'est le sens de collaudo en italien : on éprouve un pont avant de l'ouvrir à la circulation.</p>
+      <figure class="tavola oss">
+        <img class="ponte" src="/collaudo/img/ponte-vuoto.webp" width="1536" height="624" alt="Gravure d'un pont pendant une épreuve de charge : une file de camions chargés de gravier arrêtés sur le tablier et un instrument de mesure sur la rive">
+        <div class="camion" aria-hidden="true">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:0">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:1">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:2">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:3">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:4">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:5">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:6">
+          <img src="/collaudo/img/camion.webp" width="420" height="172" alt="" style="--k:7">
+        </div>
+      </figure>
+    </div>
+
+    <div class="row verbale">
+      <p class="rail">Exemple de rapport.<br>Données fictives.</p>
+      <figure>
+        <dl class="intestazione">
+          <div><dt>Document</dt><dd>Rapport de contrôle</dd></div>
+          <div><dt>Application</dt><dd>Gestion de réservations</dd></div>
+          <div><dt>Stack</dt><dd>Next.js et Supabase</dd></div>
+          <div><dt>Contrôles effectués</dt><dd>59, sur 7 domaines</dd></div>
+        </dl>
+        <table class="tab oss">
+          <thead>
+            <tr><th class="n">N°</th><th>Domaine</th><th>Note</th><th>Constat principal</th><th class="destra ctrl">Contrôle</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="n">1</td><td class="forte">Données et permissions</td><td><span class="voto rosso">Rouge</span></td><td>Un client peut lire les réservations d'un autre</td><td class="destra tenue ctrl">1.3</td></tr>
+            <tr><td class="n">2</td><td class="forte">Schéma et migrations</td><td><span class="voto rosso">Rouge</span></td><td>La base ne peut pas être reconstruite depuis le dépôt</td><td class="destra tenue ctrl">2.1</td></tr>
+            <tr><td class="n">3</td><td class="forte">CI et tests</td><td><span class="voto giallo">Orange</span></td><td>Aucun test sur les paiements</td><td class="destra tenue ctrl">3.3</td></tr>
+            <tr><td class="n">4</td><td class="forte">Environnements</td><td><span class="voto giallo">Orange</span></td><td>La préproduction envoie des e-mails à de vrais clients</td><td class="destra tenue ctrl">4.2</td></tr>
+            <tr><td class="n">5</td><td class="forte">Observabilité</td><td><span class="voto giallo">Orange</span></td><td>Les erreurs sont signalées par les clients</td><td class="destra tenue ctrl">5.2</td></tr>
+            <tr><td class="n">6</td><td class="forte">Sauvegardes, secrets et RGPD</td><td><span class="voto rosso">Rouge</span></td><td>Sauvegardes actives, restauration jamais testée</td><td class="destra tenue ctrl">6.1</td></tr>
+            <tr><td class="n">7</td><td class="forte">Agent IA</td><td><span class="voto verde">Vert</span></td><td>Règles écrites, commandes destructrices bloquées</td><td class="destra tenue ctrl">7.4</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td class="n"></td><td>Résultat</td><td colspan="3">Pas prête pour des données réelles : 3 domaines rouges, 3 orange, 1 vert</td></tr>
+          </tfoot>
+        </table>
+      </figure>
+    </div>
+
+    <section class="row sez oss">
+      <div class="rail">
+        <p class="numero">1</p>
+        <p class="nota">Incidents publics, chacun avec sa source.</p>
+        <img class="vignetta oss inchiostra" src="/collaudo/img/lucchetto.webp" width="340" height="205" alt="">
+      </div>
+      <div>
+        <h2>C'est déjà arrivé</h2>
+        <p class="attacco">Trois incidents sur des applications construites avec des outils d'IA. Aucun n'a nécessité une attaque sophistiquée.</p>
+        <div class="fatti">
+          <div class="fatto">
+            <p class="quando"><span class="dove">Lovable</span>mai 2025</p>
+            <p class="cosa">Une analyse de 1 645 applications en vitrine en trouve 170 dont les données sont lisibles par n'importe qui, faute de permissions suffisantes sur la base (CVE-2025-48757).</p>
+            <p class="da"><a class="fonte" href="https://www.superblocks.com/blog/lovable-rls-breach">Superblocks</a></p>
+          </div>
+          <div class="fatto">
+            <p class="quando"><span class="dove">Replit</span>juillet 2025</p>
+            <p class="cosa">Un agent IA supprime la base de production de SaaStr pendant un gel du code.</p>
+            <p class="da"><a class="fonte" href="https://www.techtarget.com/searchsoftwarequality/news/366627829/Replit-AI-agent-snafu-shot-across-the-bow-for-vibe-coding">TechTarget</a></p>
+          </div>
+          <div class="fatto">
+            <p class="quando"><span class="dove">Base44</span>juillet 2025</p>
+            <p class="cosa">Il suffisait de connaître l'identifiant public d'une application privée pour y entrer. La faille a été corrigée en 24 heures.</p>
+            <p class="da"><a class="fonte" href="https://wiz.io/blog/critical-vulnerability-base44">Wiz Research</a></p>
+          </div>
+        </div>
+        <div class="testo">
+          <p>Les scanners automatiques vérifient que les permissions existent. Pour savoir si elles sont justes pour votre application, il faut les essayer avec de vrais utilisateurs, un par rôle.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="aree">
+      <div class="rail">
+        <p class="numero">2</p>
+        <p class="nota">59 contrôles, dont 13 bloquants.</p>
+        <img class="vignetta oss inchiostra" src="/collaudo/img/lente.webp" width="276" height="340" alt="">
+      </div>
+      <div>
+        <h2>Ce que je contrôle</h2>
+        <p class="attacco">Chaque contrôle passe ou échoue. Si un contrôle bloquant échoue, le domaine est rouge.</p>
+        <table class="tab aree">
+          <thead>
+            <tr><th class="n">N°</th><th>Domaine</th><th>Objectif</th><th class="destra">Contrôles</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="n">1</td><td class="nome">Données et permissions</td>
+              <td class="obiettivo"><p>Aucun utilisateur ne lit ni ne modifie des données qui ne sont pas les siennes, même en appelant directement la base.</p>
+                <details><summary>Trois exemples de contrôles</summary><ul class="esempi">
+                  <li><span>1.3</span><span><b>Isolation entre clients.</b> Deux utilisateurs de deux clients différents essaient de lire et d'écrire dans chaque table. Passe si aucun ne voit les données de l'autre.</span></li>
+                  <li><span>1.4</span><span><b>Ce qu'on peut lire sans connexion.</b> J'appelle chaque table avec la seule clé publique. Passe si seules des données volontairement publiques reviennent.</span></li>
+                  <li><span>1.6</span><span><b>D'où vient le rôle d'administrateur.</b> Passe si un utilisateur ne peut pas se l'attribuer lui-même.</span></li>
+                </ul></details></td>
+              <td class="conta">10</td>
+            </tr>
+            <tr>
+              <td class="n">2</td><td class="nome">Schéma et migrations</td>
+              <td class="obiettivo"><p>La base de production peut être reconstruite depuis le dépôt et chaque modification passe par un fichier versionné.</p>
+                <details><summary>Trois exemples de contrôles</summary><ul class="esempi">
+                  <li><span>2.1</span><span><b>Schéma versionné.</b> Je reconstruis la base à partir de zéro et je la compare à la production. Passe s'il n'y a aucune différence.</span></li>
+                  <li><span>2.3</span><span><b>Aucune modification à la main.</b> Passe si seul le pipeline de déploiement applique les changements de schéma.</span></li>
+                  <li><span>2.4</span><span><b>Modifications destructrices.</b> Passe si chacune a une sauvegarde faite avant et une étape de retour arrière écrite.</span></li>
+                </ul></details></td>
+              <td class="conta">8</td>
+            </tr>
+            <tr>
+              <td class="n">3</td><td class="nome">CI et tests</td>
+              <td class="obiettivo"><p>Rien n'arrive en production sans contrôles automatiques qui testent le comportement.</p>
+                <details><summary>Trois exemples de contrôles</summary><ul class="esempi">
+                  <li><span>3.1</span><span><b>Tests des permissions.</b> Passe si une modification qui ouvre les données d'un client à un autre est bloquée automatiquement.</span></li>
+                  <li><span>3.3</span><span><b>Flux qui déplacent de l'argent ou des données.</b> Paiement, la même notification reçue deux fois, deux réservations au même instant.</span></li>
+                  <li><span>3.5</span><span><b>Détection des secrets.</b> Passe si un commit contenant une clé est refusé.</span></li>
+                </ul></details></td>
+              <td class="conta">8</td>
+            </tr>
+            <tr>
+              <td class="n">4</td><td class="nome">Environnements</td>
+              <td class="obiettivo"><p>Vous essayez une modification sans toucher aux données des clients et vous revenez en arrière en quelques minutes.</p>
+                <details><summary>Trois exemples de contrôles</summary><ul class="esempi">
+                  <li><span>4.1</span><span><b>Aperçus séparés.</b> Passe si aucun aperçu n'utilise la base de production.</span></li>
+                  <li><span>4.2</span><span><b>Services externes en mode test.</b> Passe si l'environnement de test ne peut ni débiter une vraie carte ni écrire à un vrai client.</span></li>
+                  <li><span>4.4</span><span><b>Retour à la version précédente.</b> Essayé une fois, chronométré. Passe s'il prend moins de 10 minutes.</span></li>
+                </ul></details></td>
+              <td class="conta">6</td>
+            </tr>
+            <tr>
+              <td class="n">5</td><td class="nome">Observabilité</td>
+              <td class="obiettivo"><p>Un problème vous parvient avant qu'un client ne le signale.</p>
+                <details><summary>Trois exemples de contrôles</summary><ul class="esempi">
+                  <li><span>5.1</span><span><b>Erreurs suivies partout.</b> Je déclenche une erreur de test depuis le navigateur, le serveur et une tâche planifiée. Passe si les trois apparaissent.</span></li>
+                  <li><span>5.2</span><span><b>Les erreurs arrivent à une personne.</b> Passe si l'alerte arrive en moins de 5 minutes sur un canal que quelqu'un lit.</span></li>
+                  <li><span>5.3</span><span><b>Surveillance depuis l'extérieur.</b> Connexion, fonctions principales et paiements vérifiés de l'extérieur au moins toutes les 5 minutes.</span></li>
+                </ul></details></td>
+              <td class="conta">8</td>
+            </tr>
+            <tr>
+              <td class="n">6</td><td class="nome">Sauvegardes, secrets et RGPD</td>
+              <td class="obiettivo"><p>Les données se récupèrent, les clés ne fuient pas et chaque donnée personnelle a une durée de conservation.</p>
+                <details><summary>Trois exemples de contrôles</summary><ul class="esempi">
+                  <li><span>6.1</span><span><b>Restauration testée.</b> Je restaure la dernière sauvegarde dans un projet séparé et je mesure le temps. Une sauvegarde jamais restaurée ne compte pas.</span></li>
+                  <li><span>6.2</span><span><b>Clés privilégiées.</b> Passe si aucune clé à pleins pouvoirs n'est accessible depuis le navigateur.</span></li>
+                  <li><span>6.7</span><span><b>Durée de conservation des données personnelles.</b> Passe si chaque table a une durée écrite et une suppression automatique qui fonctionne.</span></li>
+                </ul></details></td>
+              <td class="conta">11</td>
+            </tr>
+            <tr>
+              <td class="n">7</td><td class="nome">Agent IA</td>
+              <td class="obiettivo"><p>L'agent qui écrit le code travaille avec les limites d'un développeur qui vient d'arriver.</p>
+                <details><summary>Trois exemples de contrôles</summary><ul class="esempi">
+                  <li><span>7.1</span><span><b>Aucune clé de production pour l'agent.</b> Passe si l'agent ne peut pas écrire dans la base des clients.</span></li>
+                  <li><span>7.4</span><span><b>Commandes destructrices bloquées.</b> J'essaie une commande interdite. Passe si l'outil l'arrête.</span></li>
+                  <li><span>7.5</span><span><b>Modifications seulement avec des contrôles au vert.</b> Passe si les 20 derniers déploiements sont tous passés par les contrôles automatiques.</span></li>
+                </ul></details></td>
+              <td class="conta">8</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><td class="n"></td><td class="nome">Total</td><td class="obiettivo"></td><td class="conta">59</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="metodo">
+      <div class="rail">
+        <p class="numero">3</p>
+        <p class="nota">Jours ouvrés.</p>
+        <img class="vignetta oss inchiostra" src="/collaudo/img/clessidra.webp" width="340" height="248" alt="">
+      </div>
+      <div>
+        <h2>Cinq jours, de l'accès au rapport</h2>
+        <p class="attacco">L'audit lit et ne modifie rien. Vous pouvez continuer à développer pendant que je travaille.</p>
+        <ol class="passi">
+          <li class="passo"><p class="quando">Jour 0</p><div><h3>Lancement</h3><p>Un appel de 30 minutes. Vous me donnez un accès en lecture seule au dépôt et à la base. Nous signons un accord de confidentialité et un accord de sous-traitance des données.</p></div></li>
+          <li class="passo"><p class="quando">Jours 1, 2 et 3</p><div><h3>Analyse</h3><p>Je passe les 59 contrôles avec des scripts automatiques et une revue manuelle. J'essaie les permissions avec des utilisateurs de test, un par rôle et par client.</p></div></li>
+          <li class="passo"><p class="quando">Jour 4</p><div><h3>Rapport</h3><p>La note des 7 domaines, les 10 problèmes les plus graves par ordre de priorité et l'estimation pour les corriger.</p></div></li>
+          <li class="passo"><p class="quando">Jour 5</p><div><h3>Appel final</h3><p>Une heure pour lire le rapport ensemble. Si vous souhaitez continuer, vous recevez un prix fixe pour le durcissement.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="prezzi">
+      <div class="rail">
+        <p class="numero">4</p>
+        <p class="nota">Prix en euros.</p>
+        <img class="vignetta oss inchiostra" src="/collaudo/img/bilancia.webp" width="340" height="319" alt="">
+      </div>
+      <div>
+        <h2>Tarifs</h2>
+        <p class="attacco">Prix fixe, décidé avant de commencer.</p>
+        <table class="tab listino">
+          <thead>
+            <tr><th>Service</th><th>Durée</th><th class="destra">Prix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="servizio"><b>Appel découverte</b><span>Vous me montrez l'application en visioconférence. Je vous dis quels domaines je regarderais en premier et si l'audit vous est vraiment utile.</span></td><td class="durata">30 minutes</td><td class="prezzo">0 €</td></tr>
+            <tr><td class="servizio"><b>Audit</b><span>Un rapport avec la note des 7 domaines, les 10 problèmes les plus graves et l'appel final. Si vous poursuivez avec le durcissement, je le déduis du prix.</span></td><td class="durata">5 jours ouvrés</td><td class="prezzo">790 €</td></tr>
+            <tr><td class="servizio"><b>Durcissement</b><span>J'amène chaque domaine au vert avec des modifications que vous pouvez lire et approuver une par une. À la fin, vous avez des contrôles automatiques, un environnement de test, de la surveillance et une restauration testée.</span></td><td class="durata">2 ou 3 semaines</td><td class="prezzo">à partir de 2 500 €</td></tr>
+            <tr><td class="servizio"><b>Suivi</b><span>Revue mensuelle des modifications de la base et des déploiements, restauration de test tous les trois mois, mises à jour critiques.</span></td><td class="durata">Mensuel, résiliable à tout moment</td><td class="prezzo">à partir de 250 € par mois</td></tr>
+          </tbody>
+        </table>
+        <p class="invito">Tout commence par l'appel découverte : 30 minutes, gratuit. <a class="bottone" href="#contatto">Réserver l'appel gratuit</a></p>
+      </div>
+    </section>
+
+    <section class="row sez oss">
+      <div class="rail"><p class="numero">5</p></div>
+      <div>
+        <h2>Ce que je ne fais pas</h2>
+        <ul class="elenco">
+          <li>De nouvelles fonctionnalités ou des réécritures de l'application.</li>
+          <li>Des certifications comme ISO 27001 ou SOC 2.</li>
+          <li>Du conseil juridique sur le RGPD. La partie technique, oui : durées de conservation, suppression, accès.</li>
+          <li>De l'astreinte 24 h/24.</li>
+          <li>Des applications sans dépôt GitHub, ou sur d'autres stacks que Next.js ou React avec Supabase.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="row sez oss">
+      <div class="rail"><p class="numero">6</p></div>
+      <div>
+        <h2>Qui suis-je</h2>
+        <div class="testo">
+          <p>Je suis Diego Castronuovo, ingénieur plateforme. Mon métier est de faire tourner des systèmes en production : Kubernetes, Terraform, PostgreSQL, pipelines de déploiement, surveillance.</p>
+          <p>Je travaille chaque jour avec des agents IA comme Claude Code. Je sais ce qu'ils font bien et où il faut des limites qui ne dépendent pas de leur attention.</p>
+          <p>Collaudo est né de la revue d'un logiciel de gestion construit presque entièrement avec un agent IA : le produit fonctionnait, il manquait les filets de sécurité.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="row sez oss">
+      <div class="rail"><p class="numero">7</p></div>
+      <div>
+        <h2>Questions fréquentes</h2>
+        <div class="domande">
+          <div><h3>Dois-je vous donner accès à la production ?</h3><p>En lecture seule et pour une durée limitée. Avant de commencer, nous signons un accord de confidentialité et l'accord de sous-traitance prévu par le RGPD. À la fin du travail, vous révoquez les accès.</p></div>
+          <div><h3>J'ai utilisé Lovable. Est-ce que cela convient aussi ?</h3><p>Oui, si le projet est relié à GitHub et utilise Supabase. La base, les permissions et les sauvegardes sont les mêmes que pour une application écrite avec Claude Code ou Cursor.</p></div>
+          <div><h3>Dois-je arrêter de développer pendant l'audit ?</h3><p>Non. L'audit lit le code et la configuration et ne modifie rien.</p></div>
+          <div><h3>Qu'est-ce qui change pour moi après le durcissement ?</h3><p>Vous continuez à construire avec votre agent. Les règles et les contrôles restent dans le dépôt : si une modification ouvre les données d'un client à un autre, elle est arrêtée avant d'arriver en production.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="contatto">
+      <div class="rail"><p class="numero">8</p></div>
+      <div class="chiusura">
+        <h2>Commencez par l'appel gratuit.</h2>
+        <p class="attacco">30 minutes en visioconférence. Vous me montrez l'application et je vous dis quels domaines je regarderais en premier.</p>
+        <a class="bottone chiaro" href="#contatto">Réserver l'appel gratuit</a>
+        <div class="bozza">
+          <b>Brouillon</b>
+          Le bouton ci-dessus n'est pas encore relié : il manque le lien vers l'agenda et l'adresse e-mail.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="piede">
+    <span>Collaudo, par Diego Castronuovo</span>
+    <span>Vérification de mise en production pour les applications construites avec l'IA</span>
+  </footer>
+</div>
+
+<script>
+// Marks an element once it enters the screen, so its one-time animation can play.
+// Without this script, or with reduced motion, everything simply stays visible.
+(function () {
+  if (!("IntersectionObserver" in window)) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add("in-vista"); io.unobserve(e.target); }
+    });
+  }, { rootMargin: "0px 0px -10% 0px" });
+  document.querySelectorAll(".oss").forEach(function (el) { io.observe(el); });
+})();
+
+// Phone menu: the "Menu" button opens and closes the list of sections.
+(function () {
+  var testata = document.querySelector(".testata");
+  var bottone = document.getElementById("apri-menu");
+  if (!testata || !bottone) return;
+  function imposta(aperta) {
+    testata.classList.toggle("aperta", aperta);
+    bottone.setAttribute("aria-expanded", aperta ? "true" : "false");
+    bottone.textContent = aperta ? bottone.dataset.chiudi : bottone.dataset.apri;
+  }
+  bottone.addEventListener("click", function () { imposta(!testata.classList.contains("aperta")); });
+  testata.querySelectorAll("nav a").forEach(function (a) { a.addEventListener("click", function () { imposta(false); }); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") imposta(false); });
+})();
+</script>
+</body>
+</html>
