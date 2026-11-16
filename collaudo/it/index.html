@@ -550,16 +550,26 @@ img { display: block; max-width: 100%; height: auto; }
 </div>
 
 <script>
-// Marks an element once it enters the screen, so its one-time animation can play.
+// Starts an element's one-time animation just before it scrolls onto the screen.
+// The animation begins from a hidden state, so it must never start on something the
+// reader can already see: that would show it, hide it and draw it again.
 // Without this script, or with reduced motion, everything simply stays visible.
 (function () {
   if (!("IntersectionObserver" in window)) return;
+  var ANTICIPO = 80; // px below the screen edge at which the animation starts
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
-      if (e.isIntersecting) { e.target.classList.add("in-vista"); io.unobserve(e.target); }
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      // Still below the edge: animate. Already showing (a jump, a very fast scroll): leave it alone.
+      if (e.boundingClientRect.top >= window.innerHeight - 4) e.target.classList.add("in-vista");
     });
-  }, { rootMargin: "0px 0px -10% 0px" });
-  document.querySelectorAll(".oss").forEach(function (el) { io.observe(el); });
+  }, { rootMargin: "0px 0px " + ANTICIPO + "px 0px" });
+  document.querySelectorAll(".oss").forEach(function (el) {
+    // On screen when the page opens: start now, before the first paint.
+    if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add("in-vista");
+    else io.observe(el);
+  });
 })();
 
 // Phone menu: the "Menu" button opens and closes the list of sections.
