@@ -10,3 +10,10 @@ h2 .tagline{font-size:.62em;font-weight:300}.skills-container p{text-align:left}
 .services-container h3{margin-bottom:0}
 .services-actions{text-align:left;margin-top:1.2em}
 .services-langs{font-size:1.4em;color:#777}
+
+/* Top menu */
+.top-nav{text-align:right;font-size:1.5em}
+.top-nav a{color:#555;margin-left:1.6em}
+.top-nav a:hover,.top-nav a:focus{color:#477dca}
+.top-nav + .header-contianer{margin-top:20px}
+@media screen and (max-width: 768px){.top-nav{text-align:center}.top-nav a{margin:0 0.8em}}
