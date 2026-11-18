@@ -38,7 +38,7 @@ a { color: inherit; }
 
 /* Testata: resta in alto mentre si scorre */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
-[id] { scroll-margin-top: 88px; }
+[id] { scroll-margin-top: 128px; }
 .testata { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 3rem; align-items: center; padding-block: 14px; }
 .lingue { display: inline-flex; gap: 12px; font-size: 13px; color: var(--muted); }
 .lingue a[aria-current] { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
@@ -49,6 +49,10 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .testata nav { font-family: var(--sans); font-size: 15px; display: flex; flex-wrap: wrap; gap: 6px 28px; }
 .testata nav a { text-decoration: none; }
 .testata nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.testata nav a[aria-current="true"] { text-decoration: underline; text-underline-offset: 4px; }
+/* Seconda riga della testata: il servizio e le sue sezioni */
+.testata .sotto { grid-column: 1 / -1; align-items: baseline; gap: 4px 24px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--muted); }
+.testata .sotto b { color: var(--ink); font-weight: 600; }
 
 /* Apertura */
 .apertura { padding-block: clamp(40px, 7vw, 92px) clamp(12px, 2vw, 24px); }
@@ -165,6 +169,7 @@ img { display: block; max-width: 100%; height: auto; }
 .bottone.chiaro:hover { background: var(--ink); color: var(--on-accent); }
 
 .piede { border-top: 1px solid var(--rule); padding-block: 26px 44px; font-family: var(--sans); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; }
+.piede .link { display: inline-flex; gap: 16px; }
 
 /* Movimento: inchiostro e carta, niente rimbalzi. A riposo tutto è visibile;
    le animazioni partono al caricamento o quando l'elemento entra nello schermo. */
@@ -221,6 +226,10 @@ img { display: block; max-width: 100%; height: auto; }
   .js .testata.aperta nav a { font-family: var(--serif); font-size: 1.15rem; padding: 12px 0; border-top: 1px solid var(--rule); }
   .js .testata.aperta nav .lingue { gap: 22px; padding: 14px 0 4px; border-top: 1px solid var(--rule); }
   .js .testata.aperta nav .lingue a { font-family: var(--sans); font-size: 15px; padding: 0; border: 0; }
+  .testata .sotto { grid-row: 3; margin-top: 0; border-top: 0; }
+  .js .testata.aperta .sotto { padding-top: 0; }
+  .js .testata.aperta .sotto b { padding: 18px 0 6px; border-top: 1px solid var(--rule); font-size: 13px; }
+  [id] { scroll-margin-top: 88px; }
   .row { grid-template-columns: minmax(0, 1fr); row-gap: 10px; }
   .apertura .rail { padding-top: 0; max-width: none; }
   .sez .rail { display: flex; align-items: baseline; gap: 12px; }
@@ -262,14 +271,20 @@ img { display: block; max-width: 100%; height: auto; }
   <header class="testata">
     <a class="marchio" href="https://www.diegocastronuovo.com/">Diego Castronuovo</a>
     <nav id="menu" aria-label="Sections">
-      <a href="#aree">What I check</a>
-      <a href="#metodo">How it works</a>
-      <a href="#prezzi">Pricing</a>
+      <a href="https://www.diegocastronuovo.com/#servizi" aria-current="true">Services</a>
+      <a href="https://www.diegocastronuovo.com/#chi-sono">About me</a>
+      <a href="https://www.diegocastronuovo.com/cv/">CV</a>
       <a href="#contatto">Contact</a>
       <span class="lingue"><a href="/production-audit/it/" hreflang="it">IT</a><a href="/production-audit/" aria-current="page">EN</a><a href="/production-audit/fr/" hreflang="fr">FR</a><a href="/production-audit/es/" hreflang="es">ES</a></span>
     </nav>
     <a class="bottone piccolo" href="https://calendly.com/castronu/30min" target="_blank" rel="noopener">Book the check</a>
     <button class="apri-menu" type="button" id="apri-menu" aria-expanded="false" aria-controls="menu" data-apri="Menu" data-chiudi="Close">Menu</button>
+    <nav class="sotto" aria-label="On this page">
+      <b>Production readiness audit</b>
+      <a href="#aree">What I check</a>
+      <a href="#metodo">How it works</a>
+      <a href="#prezzi">Pricing</a>
+    </nav>
   </header>
 
   <main>
@@ -547,9 +562,9 @@ img { display: block; max-width: 100%; height: auto; }
   </main>
 
   <footer class="piede">
-    <span>Production readiness audit, by Diego Castronuovo</span>
+    <span>Diego Castronuovo · UID CHE-404.811.123</span>
     <span>Geneva, Switzerland · <a href="mailto:info@diegocastronuovo.com">info@diegocastronuovo.com</a></span>
-    <span>Production readiness checks for apps built with AI</span>
+    <span class="link"><a href="https://github.com/castronu" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/castronuovodiego" target="_blank" rel="noopener">LinkedIn</a><a href="https://www.diegocastronuovo.com/cv/">CV</a></span>
   </footer>
 </div>
 
