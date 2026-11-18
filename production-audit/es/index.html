@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auditoría de producción para aplicaciones creadas con IA | Diego Castronuovo</title>
+<meta name="description" content="Verificación de puesta en producción para aplicaciones web y SaaS creadas con IA: 59 controles en 7 áreas, informe en 5 días laborables.">
+<link rel="canonical" href="https://www.diegocastronuovo.com/production-audit/es/">
+<link rel="alternate" hreflang="en" href="https://www.diegocastronuovo.com/production-audit/">
+<link rel="alternate" hreflang="it" href="https://www.diegocastronuovo.com/production-audit/it/">
+<link rel="alternate" hreflang="fr" href="https://www.diegocastronuovo.com/production-audit/fr/">
+<link rel="alternate" hreflang="es" href="https://www.diegocastronuovo.com/production-audit/es/">
+<link rel="alternate" hreflang="x-default" href="https://www.diegocastronuovo.com/production-audit/">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<style>
+/* Layout: paper, not dashboard. A narrow left rail holds section numbers and notes;
+   the content sits to its right. Serif for titles and text, sans for tables and navigation.
+   One light look only, whatever the system theme. */
+:root {
+  color-scheme: light;
+  --paper: #FCFBF8; --ink: #1B1A17; --muted: #625E56; --rule: #D9D5CC;
+  --accent: #103E96; --on-accent: #FFFFFF;
+  --rosso: #B3261E; --giallo: #8A5D00; --giallo-segno: #D99A00; --verde: #1E7A3C;
+  --serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--serif); font-size: 19px; line-height: 1.55; font-optical-sizing: auto; }
+h1, h2, h3, p, ul, ol, dl, dd, table, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.page { max-width: 1100px; margin-inline: auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+.row { display: grid; grid-template-columns: 9rem minmax(0, 1fr); column-gap: 3rem; }
+.rail { font-family: var(--sans); font-size: 13px; line-height: 1.45; color: var(--muted); }
+
+/* Testata: resta in alto mentre si scorre */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+[id] { scroll-margin-top: 88px; }
+.testata { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 3rem; align-items: center; padding-block: 14px; }
+.lingue { display: inline-flex; gap: 12px; font-size: 13px; color: var(--muted); }
+.lingue a[aria-current] { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+.apri-menu { display: none; font-family: var(--sans); font-size: 14.5px; font-weight: 600; color: var(--ink); background: none; border: 1.5px solid var(--ink); padding: 8px 14px; cursor: pointer; }
+.bottone.piccolo { margin-top: 0; padding: 9.5px 14px; font-size: 14.5px; background: none; color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.bottone.piccolo:hover { background: var(--accent); color: var(--on-accent); }
+.marchio { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.testata nav { font-family: var(--sans); font-size: 15px; display: flex; flex-wrap: wrap; gap: 6px 28px; }
+.testata nav a { text-decoration: none; }
+.testata nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* Apertura */
+.apertura { padding-block: clamp(40px, 7vw, 92px) clamp(12px, 2vw, 24px); }
+.apertura .rail { padding-top: 14px; max-width: 8.5rem; }
+h1 { font-weight: 700; font-size: clamp(2.3rem, 5.2vw, 4rem); line-height: 1.05; letter-spacing: -0.012em; text-wrap: balance; }
+.spiega { font-size: 1.2rem; line-height: 1.5; max-width: 28em; margin-top: 28px; text-wrap: pretty; }
+.bottone { display: inline-block; margin-top: 32px; font-family: var(--sans); font-weight: 600; font-size: 16px; background: var(--accent); color: var(--on-accent); padding: 14px 22px; text-decoration: none; }
+.bottone:hover { background: var(--ink); color: var(--paper); }
+
+/* Sezioni */
+.sez { position: relative; padding-block: clamp(40px, 6vw, 72px); }
+.sez::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--rule); transform-origin: left; }
+.sez .numero { font-family: var(--serif); font-size: 2rem; line-height: 1.1; color: var(--ink); }
+.sez .nota { margin-top: 4px; }
+h2 { font-weight: 700; font-size: 2rem; line-height: 1.1; letter-spacing: -0.008em; text-wrap: balance; }
+h3 { font-weight: 700; font-size: 1.2rem; line-height: 1.3; }
+.attacco { max-width: 31em; margin-top: 14px; text-wrap: pretty; }
+.testo { max-width: 31em; margin-top: 22px; }
+.testo p { text-wrap: pretty; }
+.testo p + p { margin-top: 0.85em; }
+.fonte { color: var(--accent); text-underline-offset: 3px; }
+
+/* Immagini: una tavola sotto l'apertura, vignette nel margine */
+img { display: block; max-width: 100%; height: auto; }
+.tavola-riga { padding-block: 0 clamp(40px, 6vw, 72px); }
+.tavola-riga .rail { align-self: end; padding-bottom: 10px; max-width: 8.5rem; }
+.vignetta { width: 100%; max-width: 150px; margin-top: 22px; }
+/* Prova di carico: il ponte vuoto e, sopra, i camion posati sulla linea della strada */
+.tavola { position: relative; overflow: hidden; }
+.tavola .ponte { width: 100%; }
+.camion { position: absolute; left: 0.2%; right: 0.2%; bottom: 71.35%; display: flex; justify-content: space-between; align-items: flex-end;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 3% 97%, transparent); mask-image: linear-gradient(90deg, transparent, #000 3% 97%, transparent); }
+.camion img { width: 12.1%; }
+
+/* Tabelle */
+.tab { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 14.5px; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.tab th { text-align: left; font-weight: 500; font-size: 13px; color: var(--muted); padding: 9px 16px 9px 0; border-bottom: 1px solid var(--ink); white-space: nowrap; }
+.tab td { padding: 11px 16px 11px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.tab th:last-child, .tab td:last-child { padding-right: 0; }
+.tab .n { width: 2.4rem; color: var(--muted); }
+.tab .forte { font-weight: 600; }
+.tab .destra { text-align: right; }
+.tab .tenue { color: var(--muted); }
+.tab tfoot td { border-top: 1px solid var(--ink); border-bottom: 2px solid var(--ink); font-weight: 600; }
+.voto { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; white-space: nowrap; }
+.voto::before { content: ""; width: 9px; height: 9px; background: currentColor; }
+.voto.rosso { color: var(--rosso); }
+.voto.giallo { color: var(--giallo); }
+.voto.giallo::before { background: var(--giallo-segno); }
+.voto.verde { color: var(--verde); }
+
+/* Verbale */
+.verbale { padding-block: 0 clamp(48px, 7vw, 88px); }
+.intestazione { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 2px solid var(--ink); font-family: var(--sans); }
+.intestazione div { padding: 10px 16px 12px 0; }
+.intestazione dt { font-size: 13px; color: var(--muted); }
+.intestazione dd { margin-top: 2px; font-size: 14.5px; font-weight: 500; }
+.verbale .tab { border-top: 1px solid var(--ink); }
+
+/* 1. Fatti */
+.fatti { margin-top: 30px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); font-family: var(--sans); font-size: 14.5px; line-height: 1.45; }
+.fatto { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) 8.5rem; column-gap: 20px; padding: 14px 0; }
+.fatto + .fatto { border-top: 1px solid var(--rule); }
+.fatto .quando { color: var(--muted); }
+.fatto .dove { display: block; color: var(--ink); font-weight: 600; }
+.fatto .cosa { max-width: 34em; }
+.fatto .da { text-align: right; }
+
+/* 2. Aree */
+.aree { margin-top: 30px; border-top: 2px solid var(--ink); }
+.aree .nome { width: 13rem; font-weight: 600; }
+.aree .conta { width: 5.5rem; text-align: right; white-space: nowrap; }
+.aree .obiettivo p { max-width: 36em; }
+.aree details { margin-top: 8px; }
+.aree summary { cursor: pointer; color: var(--accent); font-size: 13.5px; }
+.esempi { margin-top: 6px; max-width: 36em; }
+.esempi li { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); padding: 6px 0; color: var(--muted); }
+.esempi b { color: var(--ink); font-weight: 600; }
+
+/* 3. Passi */
+.passi { margin-top: 30px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
+.passo { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); column-gap: 20px; padding: 18px 0; }
+.passo + .passo { border-top: 1px solid var(--rule); }
+.passo .quando { font-family: var(--sans); font-size: 14.5px; color: var(--muted); padding-top: 4px; }
+.passo p { max-width: 31em; margin-top: 4px; text-wrap: pretty; }
+
+/* 4. Listino */
+.listino { margin-top: 30px; border-top: 2px solid var(--ink); }
+.listino td { padding-block: 16px; }
+.listino .servizio b { display: block; font-size: 16px; font-weight: 600; }
+.listino .servizio span { display: block; margin-top: 3px; color: var(--muted); max-width: 30em; text-wrap: pretty; }
+.listino .durata { white-space: nowrap; color: var(--muted); }
+.listino .prezzo { text-align: right; white-space: nowrap; font-size: 17px; font-weight: 600; }
+.listino tbody tr:last-child td { border-bottom: 2px solid var(--ink); }
+
+/* 5. Elenco */
+.elenco { max-width: 31em; margin-top: 22px; }
+.elenco li { padding: 9px 0 9px 1.5em; position: relative; text-wrap: pretty; }
+.elenco li::before { content: "\2013"; position: absolute; left: 0; color: var(--muted); }
+.elenco li + li { border-top: 1px solid var(--rule); }
+
+/* 7. Domande */
+.domande { margin-top: 26px; display: grid; gap: 26px; max-width: 31em; }
+.domande p { margin-top: 6px; text-wrap: pretty; }
+
+/* 8. Contatto */
+
+/* Inviti a prenotare: uno dopo i prezzi, uno in chiusura (l'unico blocco di colore pieno) */
+.invito { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
+.invito .bottone { margin-top: 0; }
+.chiusura { background: var(--accent); color: var(--on-accent); padding: clamp(26px, 5vw, 56px); }
+.chiusura h2 { font-size: clamp(2rem, 4.2vw, 2.9rem); }
+.bottone.chiaro { background: var(--on-accent); color: var(--accent); }
+.bottone.chiaro:hover { background: var(--ink); color: var(--on-accent); }
+
+.piede { border-top: 1px solid var(--rule); padding-block: 26px 44px; font-family: var(--sans); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; }
+
+/* Movimento: inchiostro e carta, niente rimbalzi. A riposo tutto è visibile;
+   le animazioni partono al caricamento o quando l'elemento entra nello schermo. */
+.bottone { transition: background-color .15s, color .15s; }
+@media (prefers-reduced-motion: no-preference) {
+  h1 .p { display: inline-block; animation: sale .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--i) * 45ms); }
+  .spiega { animation: sale .7s cubic-bezier(.2, .7, .2, 1) .7s both; }
+  html { scroll-behavior: smooth; }
+  .apertura .bottone { animation: sale .7s cubic-bezier(.2, .7, .2, 1) .85s both; }
+  @keyframes sale { from { opacity: 0; transform: translateY(0.35em); } to { opacity: 1; transform: none; } }
+
+  /* I camion entrano da destra uno alla volta, alla stessa velocità, e frenano al loro posto. */
+  .tavola.in-vista .camion img {
+    animation: arriva cubic-bezier(.25, .55, .3, 1) both;
+    animation-duration: calc((8.6 - var(--k) * 1.033) / 4.6 * 1s);
+    animation-delay: calc(1.1s + var(--k) * 0.55s);
+  }
+  @keyframes arriva { from { transform: translateX(calc((8.6 - var(--k) * 1.033) * 100%)); } to { transform: none; } }
+
+  .inchiostra.in-vista, .tavola.in-vista .ponte {
+    -webkit-mask-image: linear-gradient(90deg, #000 0 33.4%, transparent 43% 100%);
+    mask-image: linear-gradient(90deg, #000 0 33.4%, transparent 43% 100%);
+    -webkit-mask-size: 300% 100%; mask-size: 300% 100%;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    animation: inchiostro 1.9s cubic-bezier(.4, .1, .2, 1) both;
+  }
+  .vignetta.inchiostra.in-vista { animation-duration: 1.1s; }
+  @keyframes inchiostro { from { -webkit-mask-position: 100% 0; mask-position: 100% 0; } to { -webkit-mask-position: 0 0; mask-position: 0 0; } }
+
+  .verbale tbody tr:nth-child(1) { --r: 0; }
+  .verbale tbody tr:nth-child(2) { --r: 1; }
+  .verbale tbody tr:nth-child(3) { --r: 2; }
+  .verbale tbody tr:nth-child(4) { --r: 3; }
+  .verbale tbody tr:nth-child(5) { --r: 4; }
+  .verbale tbody tr:nth-child(6) { --r: 5; }
+  .verbale tbody tr:nth-child(7) { --r: 6; }
+  .verbale .in-vista tbody tr { animation: appare .45s ease-out both; animation-delay: calc(var(--r) * 150ms); }
+  .verbale .in-vista .voto { animation: timbro .4s cubic-bezier(.2, 1.4, .4, 1) both; animation-delay: calc(var(--r) * 150ms + 180ms); }
+  .verbale .in-vista tfoot tr { animation: appare .6s ease-out 1.35s both; }
+  @keyframes appare { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes timbro { from { opacity: 0; transform: scale(1.8); } to { opacity: 1; transform: none; } }
+
+  .sez.in-vista::before { animation: tratto 1.1s cubic-bezier(.3, .6, .2, 1) both; }
+  @keyframes tratto { from { transform: scaleX(0); } to { transform: none; } }
+}
+
+@media (max-width: 760px) {
+  body { font-size: 18px; }
+  .testata { grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 10px; padding-block: 10px; }
+  .testata nav { grid-column: 1 / -1; grid-row: 2; padding-top: 10px; }
+  .js .apri-menu { display: inline-block; }
+  .js .testata nav { display: none; }
+  .js .testata.aperta nav { display: grid; gap: 0; padding-top: 12px; }
+  .js .testata.aperta nav a { font-family: var(--serif); font-size: 1.15rem; padding: 12px 0; border-top: 1px solid var(--rule); }
+  .js .testata.aperta nav .lingue { gap: 22px; padding: 14px 0 4px; border-top: 1px solid var(--rule); }
+  .js .testata.aperta nav .lingue a { font-family: var(--sans); font-size: 15px; padding: 0; border: 0; }
+  .row { grid-template-columns: minmax(0, 1fr); row-gap: 10px; }
+  .apertura .rail { padding-top: 0; max-width: none; }
+  .sez .rail { display: flex; align-items: baseline; gap: 12px; }
+  .sez .numero { font-size: 1.5rem; }
+  .sez .nota { margin-top: 0; }
+  .sez .rail .vignetta { width: 64px; margin: 0 0 0 auto; align-self: center; }
+  .tavola-riga .rail { align-self: auto; padding-bottom: 0; max-width: none; }
+  .intestazione { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .verbale .n, .verbale .ctrl { display: none; }
+  .verbale .tab { font-size: 13.5px; }
+  .verbale .tab td, .verbale .tab th { padding-right: 10px; }
+
+  .fatto { grid-template-columns: minmax(0, 1fr); row-gap: 4px; }
+  .fatto .da { text-align: left; }
+  .passo { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+
+  .aree thead, .listino thead { display: none; }
+  .aree tr, .listino tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; padding-block: 13px; border-bottom: 1px solid var(--rule); }
+  .aree td, .listino td { border: 0; padding: 0; }
+  .aree .n { display: none; }
+  .aree .nome { grid-column: 1; grid-row: 1; width: auto; }
+  .aree .conta { grid-column: 2; grid-row: 1; width: auto; }
+  .aree .obiettivo { grid-column: 1 / -1; grid-row: 2; padding-top: 4px; }
+  .aree tfoot td { border: 0; }
+  .aree tfoot tr { border-bottom: 2px solid var(--ink); }
+  .listino .servizio { grid-column: 1 / -1; }
+  .listino .durata { padding-top: 8px; white-space: normal; }
+  .listino .prezzo { padding-top: 6px; }
+  .listino tbody tr:last-child td { border-bottom: 0; }
+  .listino tbody tr:last-child { border-bottom: 2px solid var(--ink); }
+}
+/* Telefono stretto: il nome prende il posto del bottone in testata */
+@media (max-width: 480px) { .testata .bottone.piccolo { display: none; } }
+</style>
+</head>
+<body>
+<div class="page" id="inizio">
+  <script>document.documentElement.classList.add("js");</script>
+  <header class="testata">
+    <a class="marchio" href="https://www.diegocastronuovo.com/">Diego Castronuovo</a>
+    <nav id="menu" aria-label="Secciones">
+      <a href="#aree">Qué reviso</a>
+      <a href="#metodo">Cómo funciona</a>
+      <a href="#prezzi">Precios</a>
+      <a href="#contatto">Contacto</a>
+      <span class="lingue"><a href="/production-audit/it/" hreflang="it">IT</a><a href="/production-audit/" hreflang="en">EN</a><a href="/production-audit/fr/" hreflang="fr">FR</a><a href="/production-audit/es/" aria-current="page">ES</a></span>
+    </nav>
+    <a class="bottone piccolo" href="https://calendly.com/castronu/30min" target="_blank" rel="noopener">Reservar la llamada</a>
+    <button class="apri-menu" type="button" id="apri-menu" aria-expanded="false" aria-controls="menu" data-apri="Menu" data-chiudi="Cerrar">Menu</button>
+  </header>
+
+  <main>
+    <div class="row apertura">
+      <p class="rail"><b>Auditoría de producción.</b> Para aplicaciones web y sistemas SaaS creados con IA: Claude Code, Cursor, Lovable u otras herramientas.</p>
+      <div>
+        <h1><span class="p" style="--i:0">La</span> <span class="p" style="--i:1">has</span> <span class="p" style="--i:2">construido</span> <span class="p" style="--i:3">con</span> <span class="p" style="--i:4">IA.</span> <span class="p" style="--i:5">Antes</span> <span class="p" style="--i:6">de</span> <span class="p" style="--i:7">meter</span> <span class="p" style="--i:8">los</span> <span class="p" style="--i:9">datos</span> <span class="p" style="--i:10">de</span> <span class="p" style="--i:11">tus</span> <span class="p" style="--i:12">clientes,</span> <span class="p" style="--i:13">ponla</span> <span class="p" style="--i:14">a</span> <span class="p" style="--i:15">prueba.</span></h1>
+        <p class="spiega">59 controles en 7 áreas, desde los permisos hasta el agente de IA. En 5 días laborables sabes qué está en rojo y qué arreglar primero.</p>
+        <a class="bottone" href="https://calendly.com/castronu/30min" target="_blank" rel="noopener">Reservar la llamada gratuita</a>
+      </div>
+    </div>
+
+    <div class="row tavola-riga">
+      <p class="rail">Prueba de carga. Antes de abrirlo al tráfico, un puente se pone a prueba.</p>
+      <figure class="tavola oss">
+        <img class="ponte" src="/production-audit/img/ponte-vuoto.webp" width="1536" height="624" alt="Grabado de un puente durante una prueba de carga: una fila de camiones cargados de grava parados sobre el tablero y un instrumento de medición en la orilla">
+        <div class="camion" aria-hidden="true">
+          <img src="/production-audit/img/camion.webp" width="420" height="172" alt="" style="--k:0">
+          <img src="/production-audit/img/camion.webp" width="420" height="172" alt="" style="--k:1">
+          <img src="/production-audit/img/camion.webp" width="420" height="172" alt="" style="--k:2">
+          <img src="/production-audit/img/camion.webp" width="420" height="172" alt="" style="--k:3">
+          <img src="/production-audit/img/camion.webp" width="420" height="172" alt="" style="--k:4">
+          <img src="/production-audit/img/camion.webp" width="420" height="172" alt="" style="--k:5">
+          <img src="/production-audit/img/camion.webp" width="420" height="172" alt="" style="--k:6">
+          <img src="/production-audit/img/camion.webp" width="420" height="172" alt="" style="--k:7">
+        </div>
+      </figure>
+    </div>
+
+    <div class="row verbale">
+      <p class="rail">Ejemplo de informe.<br>Datos inventados.</p>
+      <figure>
+        <dl class="intestazione">
+          <div><dt>Documento</dt><dd>Informe de pruebas</dd></div>
+          <div><dt>Aplicación</dt><dd>Gestor de reservas</dd></div>
+          <div><dt>Stack</dt><dd>Next.js y Supabase</dd></div>
+          <div><dt>Controles realizados</dt><dd>59, en 7 áreas</dd></div>
+        </dl>
+        <table class="tab oss">
+          <thead>
+            <tr><th class="n">N.º</th><th>Área</th><th>Nota</th><th>Hallazgo principal</th><th class="destra ctrl">Control</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="n">1</td><td class="forte">Datos y permisos</td><td><span class="voto rosso">Rojo</span></td><td>Un cliente puede leer las reservas de otro</td><td class="destra tenue ctrl">1.3</td></tr>
+            <tr><td class="n">2</td><td class="forte">Esquema y migraciones</td><td><span class="voto rosso">Rojo</span></td><td>La base de datos no se puede reconstruir desde el repositorio</td><td class="destra tenue ctrl">2.1</td></tr>
+            <tr><td class="n">3</td><td class="forte">CI y tests</td><td><span class="voto giallo">Amarillo</span></td><td>Ningún test sobre los pagos</td><td class="destra tenue ctrl">3.3</td></tr>
+            <tr><td class="n">4</td><td class="forte">Entornos</td><td><span class="voto giallo">Amarillo</span></td><td>El entorno de pruebas envía correos a clientes reales</td><td class="destra tenue ctrl">4.2</td></tr>
+            <tr><td class="n">5</td><td class="forte">Observabilidad</td><td><span class="voto giallo">Amarillo</span></td><td>Los errores los avisan los clientes</td><td class="destra tenue ctrl">5.2</td></tr>
+            <tr><td class="n">6</td><td class="forte">Copias, secretos y RGPD</td><td><span class="voto rosso">Rojo</span></td><td>Copias activas, restauración nunca probada</td><td class="destra tenue ctrl">6.1</td></tr>
+            <tr><td class="n">7</td><td class="forte">Agente de IA</td><td><span class="voto verde">Verde</span></td><td>Reglas escritas, comandos destructivos bloqueados</td><td class="destra tenue ctrl">7.4</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td class="n"></td><td>Resultado</td><td colspan="3">No está lista para datos reales: 3 áreas en rojo, 3 en amarillo, 1 en verde</td></tr>
+          </tfoot>
+        </table>
+      </figure>
+    </div>
+
+    <section class="row sez oss">
+      <div class="rail">
+        <p class="numero">1</p>
+        <p class="nota">Incidentes públicos, cada uno con su fuente.</p>
+        <img class="vignetta oss inchiostra" src="/production-audit/img/lucchetto.webp" width="340" height="205" alt="">
+      </div>
+      <div>
+        <h2>Ya ha pasado</h2>
+        <p class="attacco">Tres incidentes en aplicaciones creadas con herramientas de IA. En ninguno hizo falta un ataque sofisticado.</p>
+        <div class="fatti">
+          <div class="fatto">
+            <p class="quando"><span class="dove">Lovable</span>mayo de 2025</p>
+            <p class="cosa">Un análisis de 1.645 aplicaciones del escaparate encuentra 170 con datos legibles por cualquiera, por permisos de base de datos ausentes o débiles (CVE-2025-48757).</p>
+            <p class="da"><a class="fonte" href="https://www.superblocks.com/blog/lovable-rls-breach">Superblocks</a></p>
+          </div>
+          <div class="fatto">
+            <p class="quando"><span class="dove">Replit</span>julio de 2025</p>
+            <p class="cosa">Un agente de IA borra la base de datos de producción de SaaStr durante una congelación de cambios.</p>
+            <p class="da"><a class="fonte" href="https://www.techtarget.com/searchsoftwarequality/news/366627829/Replit-AI-agent-snafu-shot-across-the-bow-for-vibe-coding">TechTarget</a></p>
+          </div>
+          <div class="fatto">
+            <p class="quando"><span class="dove">Base44</span>julio de 2025</p>
+            <p class="cosa">Para entrar en una aplicación privada bastaba con conocer su identificador público. El fallo se corrigió en 24 horas.</p>
+            <p class="da"><a class="fonte" href="https://wiz.io/blog/critical-vulnerability-base44">Wiz Research</a></p>
+          </div>
+        </div>
+        <div class="testo">
+          <p>Los escáneres automáticos comprueban que los permisos existen. Que sean los correctos para tu aplicación solo se descubre probándolos con usuarios reales, uno por cada rol.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="aree">
+      <div class="rail">
+        <p class="numero">2</p>
+        <p class="nota">59 controles, 13 de ellos bloqueantes.</p>
+        <img class="vignetta oss inchiostra" src="/production-audit/img/lente.webp" width="276" height="340" alt="">
+      </div>
+      <div>
+        <h2>Qué reviso</h2>
+        <p class="attacco">Cada control pasa o no pasa. Si falla uno bloqueante, el área queda en rojo.</p>
+        <table class="tab aree">
+          <thead>
+            <tr><th class="n">N.º</th><th>Área</th><th>Objetivo</th><th class="destra">Controles</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="n">1</td><td class="nome">Datos y permisos</td>
+              <td class="obiettivo"><p>Ningún usuario lee ni modifica datos que no son suyos, ni siquiera llamando directamente a la base de datos.</p>
+                <details><summary>Tres controles de ejemplo</summary><ul class="esempi">
+                  <li><span>1.3</span><span><b>Aislamiento entre clientes.</b> Dos usuarios de dos clientes distintos intentan leer y escribir en cada tabla. Pasa si ninguno ve los datos del otro.</span></li>
+                  <li><span>1.4</span><span><b>Qué se puede leer sin iniciar sesión.</b> Llamo a cada tabla solo con la clave pública. Pasa si solo vuelven datos deliberadamente públicos.</span></li>
+                  <li><span>1.6</span><span><b>De dónde sale el rol de administrador.</b> Pasa si un usuario no puede asignárselo a sí mismo.</span></li>
+                </ul></details></td>
+              <td class="conta">10</td>
+            </tr>
+            <tr>
+              <td class="n">2</td><td class="nome">Esquema y migraciones</td>
+              <td class="obiettivo"><p>La base de datos de producción se reconstruye desde el repositorio y cada cambio pasa por un archivo versionado.</p>
+                <details><summary>Tres controles de ejemplo</summary><ul class="esempi">
+                  <li><span>2.1</span><span><b>Esquema versionado.</b> Reconstruyo la base de datos desde cero y la comparo con producción. Pasa si no hay diferencias.</span></li>
+                  <li><span>2.3</span><span><b>Ningún cambio a mano.</b> Pasa si los cambios de esquema solo los aplica el pipeline de despliegue.</span></li>
+                  <li><span>2.4</span><span><b>Cambios destructivos.</b> Pasa si cada uno tiene una copia hecha antes y un paso de vuelta atrás por escrito.</span></li>
+                </ul></details></td>
+              <td class="conta">8</td>
+            </tr>
+            <tr>
+              <td class="n">3</td><td class="nome">CI y tests</td>
+              <td class="obiettivo"><p>Nada llega a producción sin controles automáticos que prueban el comportamiento.</p>
+                <details><summary>Tres controles de ejemplo</summary><ul class="esempi">
+                  <li><span>3.1</span><span><b>Tests de permisos.</b> Pasa si un cambio que abre los datos de un cliente a otro se bloquea automáticamente.</span></li>
+                  <li><span>3.3</span><span><b>Flujos que mueven dinero o datos.</b> Pago, el mismo aviso recibido dos veces, dos reservas en el mismo instante.</span></li>
+                  <li><span>3.5</span><span><b>Detección de secretos.</b> Pasa si se rechaza un commit que contiene una clave.</span></li>
+                </ul></details></td>
+              <td class="conta">8</td>
+            </tr>
+            <tr>
+              <td class="n">4</td><td class="nome">Entornos</td>
+              <td class="obiettivo"><p>Pruebas un cambio sin tocar los datos de los clientes y vuelves atrás en pocos minutos.</p>
+                <details><summary>Tres controles de ejemplo</summary><ul class="esempi">
+                  <li><span>4.1</span><span><b>Vistas previas separadas.</b> Pasa si ninguna vista previa usa la base de datos de producción.</span></li>
+                  <li><span>4.2</span><span><b>Servicios externos en modo de prueba.</b> Pasa si el entorno de pruebas no puede cobrar a una tarjeta real ni escribir a un cliente real.</span></li>
+                  <li><span>4.4</span><span><b>Vuelta a la versión anterior.</b> Probada una vez, cronometrada. Pasa si lleva menos de 10 minutos.</span></li>
+                </ul></details></td>
+              <td class="conta">6</td>
+            </tr>
+            <tr>
+              <td class="n">5</td><td class="nome">Observabilidad</td>
+              <td class="obiettivo"><p>Un problema te llega a ti antes de que lo avise un cliente.</p>
+                <details><summary>Tres controles de ejemplo</summary><ul class="esempi">
+                  <li><span>5.1</span><span><b>Errores registrados en todas partes.</b> Lanzo un error de prueba desde el navegador, el servidor y una tarea programada. Pasa si aparecen los tres.</span></li>
+                  <li><span>5.2</span><span><b>Los errores llegan a una persona.</b> Pasa si el aviso llega en menos de 5 minutos a un canal que alguien lee.</span></li>
+                  <li><span>5.3</span><span><b>Vigilancia desde fuera.</b> Acceso, funciones principales y pagos comprobados desde fuera al menos cada 5 minutos.</span></li>
+                </ul></details></td>
+              <td class="conta">8</td>
+            </tr>
+            <tr>
+              <td class="n">6</td><td class="nome">Copias, secretos y RGPD</td>
+              <td class="obiettivo"><p>Los datos se recuperan, las claves no se filtran y cada dato personal tiene una caducidad.</p>
+                <details><summary>Tres controles de ejemplo</summary><ul class="esempi">
+                  <li><span>6.1</span><span><b>Restauración probada.</b> Restauro la última copia en un proyecto aparte y mido el tiempo. Una copia que nunca se ha restaurado no cuenta.</span></li>
+                  <li><span>6.2</span><span><b>Claves privilegiadas.</b> Pasa si ninguna clave con plenos poderes es accesible desde el navegador.</span></li>
+                  <li><span>6.7</span><span><b>Caducidad de los datos personales.</b> Pasa si cada tabla tiene un plazo por escrito y un borrado automático que funciona.</span></li>
+                </ul></details></td>
+              <td class="conta">11</td>
+            </tr>
+            <tr>
+              <td class="n">7</td><td class="nome">Agente de IA</td>
+              <td class="obiettivo"><p>El agente que escribe el código trabaja con los límites de un desarrollador recién llegado.</p>
+                <details><summary>Tres controles de ejemplo</summary><ul class="esempi">
+                  <li><span>7.1</span><span><b>Ninguna clave de producción para el agente.</b> Pasa si el agente no puede escribir en la base de datos de los clientes.</span></li>
+                  <li><span>7.4</span><span><b>Comandos destructivos bloqueados.</b> Pruebo un comando prohibido. Pasa si lo detiene la herramienta.</span></li>
+                  <li><span>7.5</span><span><b>Cambios solo con controles en verde.</b> Pasa si los últimos 20 despliegues han pasado todos por los controles automáticos.</span></li>
+                </ul></details></td>
+              <td class="conta">8</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><td class="n"></td><td class="nome">Total</td><td class="obiettivo"></td><td class="conta">59</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="metodo">
+      <div class="rail">
+        <p class="numero">3</p>
+        <p class="nota">Días laborables.</p>
+        <img class="vignetta oss inchiostra" src="/production-audit/img/clessidra.webp" width="340" height="248" alt="">
+      </div>
+      <div>
+        <h2>Cinco días, del acceso al informe</h2>
+        <p class="attacco">La auditoría lee y no modifica nada. Puedes seguir desarrollando mientras trabajo.</p>
+        <ol class="passi">
+          <li class="passo"><p class="quando">Día 0</p><div><h3>Arranque</h3><p>Una llamada de 30 minutos. Me das acceso de solo lectura al repositorio y a la base de datos. Firmamos un acuerdo de confidencialidad y un acuerdo de encargo del tratamiento.</p></div></li>
+          <li class="passo"><p class="quando">Días 1, 2 y 3</p><div><h3>Análisis</h3><p>Paso los 59 controles con scripts automáticos y revisión manual. Los permisos los pruebo con usuarios de prueba, uno por rol y por cliente.</p></div></li>
+          <li class="passo"><p class="quando">Día 4</p><div><h3>Informe</h3><p>La nota de las 7 áreas, los 10 problemas más graves por orden y la estimación para arreglarlos. Con el informe recibes las skills, las instrucciones del agente reescritas y los tickets listos.</p></div></li>
+          <li class="passo"><p class="quando">Día 5</p><div><h3>Llamada final</h3><p>Una hora para leer el informe juntos. Si quieres seguir, recibes un precio fijo por el hardening.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="prezzi">
+      <div class="rail">
+        <p class="numero">4</p>
+        <p class="nota">Precios en euros.</p>
+        <img class="vignetta oss inchiostra" src="/production-audit/img/bilancia.webp" width="340" height="319" alt="">
+      </div>
+      <div>
+        <h2>Precios</h2>
+        <p class="attacco">Precio fijo, acordado antes de empezar.</p>
+        <table class="tab listino">
+          <thead>
+            <tr><th>Servicio</th><th>Duración</th><th class="destra">Precio</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="servizio"><b>Llamada inicial</b><span>Me enseñas la aplicación por videollamada. Te digo qué áreas miraría primero y si la auditoría te hace falta de verdad.</span></td><td class="durata">30 minutos</td><td class="prezzo">0 €</td></tr>
+            <tr><td class="servizio"><b>Auditoría</b><span>Un informe con la nota de las 7 áreas y los 10 problemas más graves. Para tu agente: un conjunto de skills, el archivo de instrucciones reescrito (AGENTS.md o equivalente) y tickets listos para que los ejecute. Llamada final incluida. Si sigues con el hardening, lo descuento del precio.</span></td><td class="durata">5 días laborables</td><td class="prezzo">790 €</td></tr>
+            <tr><td class="servizio"><b>Hardening</b><span>Llevo cada área a verde con cambios que puedes leer y aprobar uno a uno. Al final tienes controles automáticos, entorno de pruebas, monitorización y una restauración probada.</span></td><td class="durata">2 o 3 semanas</td><td class="prezzo">desde 2.500 €</td></tr>
+            <tr><td class="servizio"><b>Mantenimiento</b><span>Revisión mensual de los cambios en la base de datos y de los despliegues, restauración de prueba cada tres meses, actualizaciones críticas.</span></td><td class="durata">Mensual, cancela cuando quieras</td><td class="prezzo">desde 250 € al mes</td></tr>
+          </tbody>
+        </table>
+        <p class="invito">Todo empieza con la llamada inicial: 30 minutos, gratis. <a class="bottone" href="https://calendly.com/castronu/30min" target="_blank" rel="noopener">Reservar la llamada gratuita</a></p>
+      </div>
+    </section>
+
+    <section class="row sez oss">
+      <div class="rail"><p class="numero">5</p></div>
+      <div>
+        <h2>Qué no hago</h2>
+        <ul class="elenco">
+          <li>Nuevas funcionalidades o reescrituras de la aplicación.</li>
+          <li>Certificaciones como ISO 27001 o SOC 2.</li>
+          <li>Asesoría legal sobre el RGPD. La parte técnica sí: plazos de conservación, borrado, accesos.</li>
+          <li>Guardia 24 horas.</li>
+          <li>Aplicaciones sin repositorio en GitHub.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="row sez oss">
+      <div class="rail"><p class="numero">6</p></div>
+      <div>
+        <h2>Quién soy</h2>
+        <div class="testo">
+          <p>Soy Diego Castronuovo, ingeniero de plataforma, con 15 años de experiencia en sistemas cloud y escalabilidad de aplicaciones. Mi trabajo es mantener en pie sistemas en producción: Kubernetes, Terraform, PostgreSQL, pipelines de despliegue, monitorización.</p>
+          <p>Trabajo cada día con agentes de IA como Claude Code. Sé qué hacen bien y dónde hacen falta límites que no dependan de su atención.</p>
+          <p>Este servicio nace de la revisión de un software de gestión construido casi por completo con un agente de IA: el producto funcionaba, faltaban las redes de seguridad.</p>
+          <p>Si tu equipo quiere agentes de IA que trabajen sobre la producción, en tu propia nube, mira los <a class="fonte" href="https://www.diegocastronuovo.com/ai-agents/es/">agentes de IA para equipos técnicos</a>.</p>
+          <p><a class="fonte" href="https://www.diegocastronuovo.com/">Mi CV</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="row sez oss">
+      <div class="rail"><p class="numero">7</p></div>
+      <div>
+        <h2>Preguntas frecuentes</h2>
+        <div class="domande">
+          <div><h3>¿Tengo que darte acceso a producción?</h3><p>De solo lectura y por tiempo limitado. Antes de empezar firmamos un acuerdo de confidencialidad y el acuerdo de encargo del tratamiento que exige el RGPD. Al terminar el trabajo revocas los accesos.</p></div>
+          <div><h3>He usado Lovable. ¿Sirve igual?</h3><p>Sí, si el proyecto está conectado a GitHub. La base de datos, los permisos y las copias se revisan igual que en una aplicación escrita con Claude Code o Cursor.</p></div>
+          <div><h3>¿Tengo que dejar de desarrollar durante la auditoría?</h3><p>No. La auditoría lee el código y la configuración y no modifica nada.</p></div>
+          <div><h3>¿Qué cambia para mí después del hardening?</h3><p>Sigues construyendo con tu agente. Las reglas y los controles se quedan en el repositorio: si un cambio abre los datos de un cliente a otro, se detiene antes de llegar a producción.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="contatto">
+      <div class="rail"><p class="numero">8</p></div>
+      <div class="chiusura">
+        <h2>Empieza por la llamada gratuita.</h2>
+        <p class="attacco">30 minutos por videollamada. Me enseñas la aplicación y te digo qué áreas miraría primero.</p>
+        <a class="bottone chiaro" href="https://calendly.com/castronu/30min" target="_blank" rel="noopener">Reservar la llamada gratuita</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="piede">
+    <span>Auditoría de producción, de Diego Castronuovo</span>
+    <span>Ginebra, Suiza · <a href="mailto:info@diegocastronuovo.com">info@diegocastronuovo.com</a></span>
+    <span>Verificación de puesta en producción para aplicaciones creadas con IA</span>
+  </footer>
+</div>
+
+<script>
+// Starts an element's one-time animation just before it scrolls onto the screen.
+// The animation begins from a hidden state, so it must never start on something the
+// reader can already see: that would show it, hide it and draw it again.
+// Without this script, or with reduced motion, everything simply stays visible.
+(function () {
+  if (!("IntersectionObserver" in window)) return;
+  var ANTICIPO = 80; // px below the screen edge at which the animation starts
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      // Still below the edge: animate. Already showing (a jump, a very fast scroll): leave it alone.
+      if (e.boundingClientRect.top >= window.innerHeight - 4) e.target.classList.add("in-vista");
+    });
+  }, { rootMargin: "0px 0px " + ANTICIPO + "px 0px" });
+  document.querySelectorAll(".oss").forEach(function (el) {
+    // On screen when the page opens: start now, before the first paint.
+    if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add("in-vista");
+    else io.observe(el);
+  });
+})();
+
+// Phone menu: the "Menu" button opens and closes the list of sections.
+(function () {
+  var testata = document.querySelector(".testata");
+  var bottone = document.getElementById("apri-menu");
+  if (!testata || !bottone) return;
+  function imposta(aperta) {
+    testata.classList.toggle("aperta", aperta);
+    bottone.setAttribute("aria-expanded", aperta ? "true" : "false");
+    bottone.textContent = aperta ? bottone.dataset.chiudi : bottone.dataset.apri;
+  }
+  bottone.addEventListener("click", function () { imposta(!testata.classList.contains("aperta")); });
+  testata.querySelectorAll("nav a").forEach(function (a) { a.addEventListener("click", function () { imposta(false); }); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") imposta(false); });
+})();
+</script>
+</body>
+</html>
