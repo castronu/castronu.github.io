@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freelance platform engineering for startups, SMEs and engineering teams | Diego Castronuovo</title>
+<meta name="description" content="Freelance platform engineering for startups, SMEs and engineering teams: cloud platforms, scaling, AWS, Kubernetes and security reviews, AI agents. By the day or at a fixed price.">
+<link rel="canonical" href="https://www.diegocastronuovo.com/platform-engineering/">
+<link rel="alternate" hreflang="en" href="https://www.diegocastronuovo.com/platform-engineering/">
+<link rel="alternate" hreflang="it" href="https://www.diegocastronuovo.com/platform-engineering/it/">
+<link rel="alternate" hreflang="fr" href="https://www.diegocastronuovo.com/platform-engineering/fr/">
+<link rel="alternate" hreflang="es" href="https://www.diegocastronuovo.com/platform-engineering/es/">
+<link rel="alternate" hreflang="x-default" href="https://www.diegocastronuovo.com/platform-engineering/">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<style>
+/* Layout: paper, not dashboard. A narrow left rail holds section numbers and notes;
+   the content sits to its right. Serif for titles and text, sans for tables and navigation.
+   One light look only, whatever the system theme. */
+:root {
+  color-scheme: light;
+  --paper: #FCFBF8; --ink: #1B1A17; --muted: #625E56; --rule: #D9D5CC;
+  --accent: #103E96; --on-accent: #FFFFFF;
+  --rosso: #B3261E; --giallo: #8A5D00; --giallo-segno: #D99A00; --verde: #1E7A3C;
+  --serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--serif); font-size: 19px; line-height: 1.55; font-optical-sizing: auto; }
+h1, h2, h3, p, ul, ol, dl, dd, table, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.page { max-width: 1100px; margin-inline: auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+.row { display: grid; grid-template-columns: 9rem minmax(0, 1fr); column-gap: 3rem; }
+.rail { font-family: var(--sans); font-size: 13px; line-height: 1.45; color: var(--muted); }
+
+/* Testata: resta in alto mentre si scorre */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+[id] { scroll-margin-top: 88px; }
+.testata { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 3rem; align-items: center; padding-block: 14px; }
+.lingue { display: inline-flex; gap: 12px; font-size: 13px; color: var(--muted); }
+.lingue a[aria-current] { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+.apri-menu { display: none; font-family: var(--sans); font-size: 14.5px; font-weight: 600; color: var(--ink); background: none; border: 1.5px solid var(--ink); padding: 8px 14px; cursor: pointer; }
+.bottone.piccolo { margin-top: 0; padding: 9.5px 14px; font-size: 14.5px; background: none; color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.bottone.piccolo:hover { background: var(--accent); color: var(--on-accent); }
+.marchio { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.testata nav { font-family: var(--sans); font-size: 15px; display: flex; flex-wrap: wrap; gap: 6px 28px; }
+.testata nav a { text-decoration: none; }
+.testata nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* Apertura */
+.apertura { padding-block: clamp(40px, 7vw, 92px) clamp(12px, 2vw, 24px); }
+.apertura .rail { padding-top: 14px; max-width: 8.5rem; }
+h1 { font-weight: 700; font-size: clamp(2.3rem, 5.2vw, 4rem); line-height: 1.05; letter-spacing: -0.012em; text-wrap: balance; }
+.spiega { font-size: 1.2rem; line-height: 1.5; max-width: 28em; margin-top: 28px; text-wrap: pretty; }
+.bottone { display: inline-block; margin-top: 32px; font-family: var(--sans); font-weight: 600; font-size: 16px; background: var(--accent); color: var(--on-accent); padding: 14px 22px; text-decoration: none; }
+.bottone:hover { background: var(--ink); color: var(--paper); }
+
+/* Sezioni */
+.sez { position: relative; padding-block: clamp(40px, 6vw, 72px); }
+.sez::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--rule); transform-origin: left; }
+.sez .numero { font-family: var(--serif); font-size: 2rem; line-height: 1.1; color: var(--ink); }
+.sez .nota { margin-top: 4px; }
+h2 { font-weight: 700; font-size: 2rem; line-height: 1.1; letter-spacing: -0.008em; text-wrap: balance; }
+h3 { font-weight: 700; font-size: 1.2rem; line-height: 1.3; }
+.attacco { max-width: 31em; margin-top: 14px; text-wrap: pretty; }
+.testo { max-width: 31em; margin-top: 22px; }
+.testo p { text-wrap: pretty; }
+.testo p + p { margin-top: 0.85em; }
+.fonte { color: var(--accent); text-underline-offset: 3px; }
+
+/* Immagini: una tavola sotto l'apertura, vignette nel margine */
+img { display: block; max-width: 100%; height: auto; }
+.tavola-riga { padding-block: 0 clamp(40px, 6vw, 72px); }
+.tavola-riga .rail { align-self: end; padding-bottom: 10px; max-width: 8.5rem; }
+.vignetta { width: 100%; max-width: 150px; margin-top: 22px; }
+.tavola { position: relative; overflow: hidden; }
+
+/* Tabelle */
+.tab { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 14.5px; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.tab th { text-align: left; font-weight: 500; font-size: 13px; color: var(--muted); padding: 9px 16px 9px 0; border-bottom: 1px solid var(--ink); white-space: nowrap; }
+.tab td { padding: 11px 16px 11px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.tab th:last-child, .tab td:last-child { padding-right: 0; }
+.tab .n { width: 2.4rem; color: var(--muted); }
+.tab .forte { font-weight: 600; }
+.tab .destra { text-align: right; }
+.tab .tenue { color: var(--muted); }
+.tab tfoot td { border-top: 1px solid var(--ink); border-bottom: 2px solid var(--ink); font-weight: 600; }
+
+
+
+/* Aree */
+.aree { margin-top: 30px; border-top: 2px solid var(--ink); }
+.aree .nome { width: 13rem; font-weight: 600; }
+.aree .obiettivo p { max-width: 36em; }
+
+/* Passi */
+.passi { margin-top: 30px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
+.passo { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); column-gap: 20px; padding: 18px 0; }
+.passo + .passo { border-top: 1px solid var(--rule); }
+.passo .quando { font-family: var(--sans); font-size: 14.5px; color: var(--muted); padding-top: 4px; }
+.passo p { max-width: 31em; margin-top: 4px; text-wrap: pretty; }
+
+/* Listino */
+.listino { margin-top: 30px; border-top: 2px solid var(--ink); }
+.listino td { padding-block: 16px; }
+.listino .servizio b { display: block; font-size: 16px; font-weight: 600; }
+.listino .servizio span { display: block; margin-top: 3px; color: var(--muted); max-width: 30em; text-wrap: pretty; }
+.listino .durata { white-space: nowrap; color: var(--muted); }
+.listino .prezzo { text-align: right; white-space: nowrap; font-size: 17px; font-weight: 600; }
+.listino tbody tr:last-child td { border-bottom: 2px solid var(--ink); }
+
+
+/* Domande */
+.domande { margin-top: 26px; display: grid; gap: 26px; max-width: 31em; }
+.domande p { margin-top: 6px; text-wrap: pretty; }
+
+
+/* Inviti a prenotare: uno dopo i prezzi, uno in chiusura (l'unico blocco di colore pieno) */
+.invito { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
+.invito .bottone { margin-top: 0; }
+.chiusura { background: var(--accent); color: var(--on-accent); padding: clamp(26px, 5vw, 56px); }
+.chiusura h2 { font-size: clamp(2rem, 4.2vw, 2.9rem); }
+.bottone.chiaro { background: var(--on-accent); color: var(--accent); }
+.bottone.chiaro:hover { background: var(--ink); color: var(--on-accent); }
+
+.piede { border-top: 1px solid var(--rule); padding-block: 26px 44px; font-family: var(--sans); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; }
+
+/* Movimento: inchiostro e carta, niente rimbalzi. A riposo tutto è visibile;
+   le animazioni partono al caricamento o quando l'elemento entra nello schermo. */
+.bottone { transition: background-color .15s, color .15s; }
+@media (prefers-reduced-motion: no-preference) {
+  h1 .p { display: inline-block; animation: sale .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--i) * 45ms); }
+  .spiega { animation: sale .7s cubic-bezier(.2, .7, .2, 1) .7s both; }
+  html { scroll-behavior: smooth; }
+  .apertura .bottone { animation: sale .7s cubic-bezier(.2, .7, .2, 1) .85s both; }
+  @keyframes sale { from { opacity: 0; transform: translateY(0.35em); } to { opacity: 1; transform: none; } }
+
+
+  .inchiostra.in-vista {
+    -webkit-mask-image: linear-gradient(90deg, #000 0 33.4%, transparent 43% 100%);
+    mask-image: linear-gradient(90deg, #000 0 33.4%, transparent 43% 100%);
+    -webkit-mask-size: 300% 100%; mask-size: 300% 100%;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    animation: inchiostro 1.9s cubic-bezier(.4, .1, .2, 1) both;
+  }
+  .vignetta.inchiostra.in-vista { animation-duration: 1.1s; }
+  @keyframes inchiostro { from { -webkit-mask-position: 100% 0; mask-position: 100% 0; } to { -webkit-mask-position: 0 0; mask-position: 0 0; } }
+
+
+  .sez.in-vista::before { animation: tratto 1.1s cubic-bezier(.3, .6, .2, 1) both; }
+  @keyframes tratto { from { transform: scaleX(0); } to { transform: none; } }
+}
+
+@media (max-width: 760px) {
+  body { font-size: 18px; }
+  .testata { grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 10px; padding-block: 10px; }
+  .testata nav { grid-column: 1 / -1; grid-row: 2; padding-top: 10px; }
+  .js .apri-menu { display: inline-block; }
+  .js .testata nav { display: none; }
+  .js .testata.aperta nav { display: grid; gap: 0; padding-top: 12px; }
+  .js .testata.aperta nav a { font-family: var(--serif); font-size: 1.15rem; padding: 12px 0; border-top: 1px solid var(--rule); }
+  .js .testata.aperta nav .lingue { gap: 22px; padding: 14px 0 4px; border-top: 1px solid var(--rule); }
+  .js .testata.aperta nav .lingue a { font-family: var(--sans); font-size: 15px; padding: 0; border: 0; }
+  .row { grid-template-columns: minmax(0, 1fr); row-gap: 10px; }
+  .apertura .rail { padding-top: 0; max-width: none; }
+  .sez .rail { display: flex; align-items: baseline; gap: 12px; }
+  .sez .numero { font-size: 1.5rem; }
+  .sez .nota { margin-top: 0; }
+  .sez .rail .vignetta { width: 64px; margin: 0 0 0 auto; align-self: center; }
+  .tavola-riga .rail { align-self: auto; padding-bottom: 0; max-width: none; }
+
+  .passo { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+
+  .aree thead, .listino thead { display: none; }
+  .aree tr, .listino tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; padding-block: 13px; border-bottom: 1px solid var(--rule); }
+  .aree td, .listino td { border: 0; padding: 0; }
+  .aree .n { display: none; }
+  .aree .nome { grid-column: 1; grid-row: 1; width: auto; }
+  .aree .obiettivo { grid-column: 1 / -1; grid-row: 2; padding-top: 4px; }
+  .aree tfoot td { border: 0; }
+  .aree tfoot tr { border-bottom: 2px solid var(--ink); }
+  .listino .servizio { grid-column: 1 / -1; }
+  .listino .durata { padding-top: 8px; white-space: normal; }
+  .listino .prezzo { padding-top: 6px; }
+  .listino tbody tr:last-child td { border-bottom: 0; }
+  .listino tbody tr:last-child { border-bottom: 2px solid var(--ink); }
+}
+
+/* Esempi: per chi e da quando, sotto il nome del lavoro */
+.aree .nome span { display: block; margin-top: 3px; font-weight: 400; color: var(--muted); }
+
+/* Parete di attrezzi: la parete con la sagoma vuota fa da fondo; la chiave inglese è un pezzo a parte,
+   ritagliato dalla scena completa. Posizioni in percentuale della tavola (1536x634), da attrezzi.sh. */
+.tavola .scena { width: 100%; }
+.chiave { position: absolute; left: 56.90%; top: 14.35%; width: 7.62%; }
+@media (prefers-reduced-motion: no-preference) {
+  /* Inchiostrata la parete, la chiave torna al suo posto: sale dal banco, girata, e si raddrizza
+     sotto il gancio. A riposo è appesa. */
+  .tavola.in-vista .chiave { animation: al-suo-posto 1.8s cubic-bezier(.2, .7, .2, 1) 1.6s both; }
+  @keyframes al-suo-posto {
+    from { opacity: 0; transform: translate(20%, 55%) rotate(10deg); }
+    25% { opacity: 1; }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+/* Telefono stretto: il nome prende il posto del bottone in testata */
+@media (max-width: 480px) { .testata .bottone.piccolo { display: none; } }
+</style>
+</head>
+<body>
+<div class="page" id="inizio">
+  <script>document.documentElement.classList.add("js");</script>
+  <header class="testata">
+    <a class="marchio" href="https://www.diegocastronuovo.com/">Diego Castronuovo</a>
+    <nav id="menu" aria-label="Sections">
+      <a href="#esempi">Examples</a>
+      <a href="#metodo">How it works</a>
+      <a href="#prezzi">Pricing</a>
+      <a href="#contatto">Contact</a>
+      <span class="lingue"><a href="/platform-engineering/it/" hreflang="it">IT</a><a href="/platform-engineering/" aria-current="page">EN</a><a href="/platform-engineering/fr/" hreflang="fr">FR</a><a href="/platform-engineering/es/" hreflang="es">ES</a></span>
+    </nav>
+    <a class="bottone piccolo" href="https://calendly.com/castronu/30min" target="_blank" rel="noopener">Book a call</a>
+    <button class="apri-menu" type="button" id="apri-menu" aria-expanded="false" aria-controls="menu" data-apri="Menu" data-chiudi="Close">Menu</button>
+  </header>
+
+  <main>
+    <div class="row apertura">
+      <p class="rail"><b>Freelance platform engineering.</b> For startups, SMEs and engineering teams.</p>
+      <div>
+        <h1><span class="p" style="--i:0">Tell</span> <span class="p" style="--i:1">me</span> <span class="p" style="--i:2">what</span> <span class="p" style="--i:3">you</span> <span class="p" style="--i:4">need.</span> <span class="p" style="--i:5">I</span> <span class="p" style="--i:6">build</span> <span class="p" style="--i:7">it</span> <span class="p" style="--i:8">and</span> <span class="p" style="--i:9">take</span> <span class="p" style="--i:10">it</span> <span class="p" style="--i:11">to</span> <span class="p" style="--i:12">production.</span></h1>
+        <p class="spiega">Cloud platforms, services that must handle more load, security reviews, AI agents: over the last ten years I have done them all in production. Day rate or fixed price, depending on the job.</p>
+        <a class="bottone" href="https://calendly.com/castronu/30min" target="_blank" rel="noopener">Book the free call</a>
+      </div>
+    </div>
+
+    <div class="row tavola-riga">
+      <p class="rail">A tool for every job.</p>
+      <figure class="tavola oss inchiostra">
+        <img class="scena" src="/platform-engineering/img/attrezzi.webp" width="1536" height="634" alt="Engraving of a workshop tool wall: every tool hanging in its place, outlined on the board">
+        <img class="chiave" src="/platform-engineering/img/chiave.webp" width="117" height="333" alt="" aria-hidden="true">
+      </figure>
+    </div>
+
+    <section class="row sez oss" id="esempi">
+      <div class="rail">
+        <p class="numero">1</p>
+        <p class="nota">From 2011 to today.</p>
+        <img class="vignetta oss inchiostra" src="/platform-engineering/img/cassetta.webp" width="340" height="315" alt="">
+      </div>
+      <div>
+        <h2>What I have done</h2>
+        <table class="tab aree">
+          <thead>
+            <tr><th class="n">No.</th><th>Work</th><th>What I did</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="n">1</td><td class="nome">Cloud platform from scratch<span>A live-streaming SaaS platform, since 2016</span></td><td class="obiettivo"><p>I have built and run it since day one. In 2020 I led the move to Kubernetes, with GitOps and infrastructure as code. Then came autoscaling with Karpenter, a serverless framework on Kubernetes to get past the limits of Lambda, and GPU workloads.</p></td></tr>
+            <tr><td class="n">2</td><td class="nome">More scale and reliability<span>The same platform</span></td><td class="obiettivo"><p>Back-end services in Java, Go, Python and Node: performance, load testing, multi-layer caching, including CloudFront for the less dynamic public APIs.</p></td></tr>
+            <tr><td class="n">3</td><td class="nome">Cloud services for live streaming<span>The same platform</span></td><td class="obiettivo"><p>CDN: cache strategy, invalidation, edge behaviour, origin design and the observability needed to troubleshoot real-world delivery issues.</p></td></tr>
+            <tr><td class="n">4</td><td class="nome">AWS, Kubernetes and security reviews<span>The same platform</span></td><td class="obiettivo"><p>Reviews of AWS and Kubernetes configurations, and security reviews.</p></td></tr>
+            <tr><td class="n">5</td><td class="nome">AI agents<span>The same platform</span></td><td class="obiettivo"><p>An agent platform that investigates incidents, runs operations with a person's approval, reviews every pull request and writes code in the cloud. Today it is a service of its own: <a class="fonte" href="/ai-agents/">AI agents for engineering teams</a>.</p></td></tr>
+            <tr><td class="n">6</td><td class="nome">Logistics<span>OVO, Geneva, since 2021</span></td><td class="obiettivo"><p>OVO designs and runs first- and last-mile micro-logistics for businesses and public authorities. From 2021 I helped them use no-code tools to work effectively. Today I look after the improvements and the robustness of their logistics platform.</p></td></tr>
+            <tr><td class="n">7</td><td class="nome">Review of an app built with AI<span>A business app built almost entirely with an AI agent</span></td><td class="obiettivo"><p>The product worked, the safety nets were missing. That review gave rise to the <a class="fonte" href="/production-audit/">production readiness audit</a>.</p></td></tr>
+            <tr><td class="n">8</td><td class="nome">Private cloud<span>Generali, 2018–2019</span></td><td class="obiettivo"><p>OpenShift with Docker and Kafka: GitOps CI/CD during the Kubernetes migration, monitoring with Prometheus and Grafana, namespace quotas, security scanning of Docker images.</p></td></tr>
+            <tr><td class="n">9</td><td class="nome">Cloud migration<span>Hortis GRC, 2014–2015</span></td><td class="obiettivo"><p>GlassIG, an information governance SaaS: Java back end, the move from on-premise servers to the cloud, a language to automate integration tests, application security and code quality.</p></td></tr>
+            <tr><td class="n">10</td><td class="nome">Banking payments<span>Swissquote Bank, 2011–2013</span></td><td class="obiettivo"><p>Batch jobs and back-end services for incoming and outgoing payments, the interface with the Temenos T24 banking system and automated document generation.</p></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="metodo">
+      <div class="rail">
+        <p class="numero">2</p>
+        <img class="vignetta oss inchiostra" src="/platform-engineering/img/calibro.webp" width="340" height="235" alt="">
+      </div>
+      <div>
+        <h2>How it works</h2>
+        <ol class="passi">
+          <li class="passo"><p class="quando">30 minutes</p><div><h3>Call</h3><p>You tell me what you need. I tell you how I would do it and whether I am the right person for it.</p></div></li>
+          <li class="passo"><p class="quando">After the call</p><div><h3>Proposal</h3><p>I write down what I will do, how long it will take and what it will cost. By the day if the work is open-ended, at a fixed price if it is already defined.</p></div></li>
+          <li class="passo"><p class="quando">Depends on the job</p><div><h3>The work</h3><p>The agreed work, in your code and in your cloud.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="prezzi">
+      <div class="rail">
+        <p class="numero">3</p>
+        <img class="vignetta oss inchiostra" src="/platform-engineering/img/cartellino.webp" width="340" height="236" alt="">
+      </div>
+      <div>
+        <h2>Pricing</h2>
+        <p class="attacco">Day rate or fixed price, depending on the job.</p>
+        <table class="tab listino">
+          <thead>
+            <tr><th>Service</th><th>Duration</th><th class="destra">Price</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="servizio"><b>Call</b><span>You tell me what you need, I tell you how I would do it.</span></td><td class="durata">30 minutes</td><td class="prezzo">€0</td></tr>
+            <tr><td class="servizio"><b>By the day</b><span>For open-ended work, when the end is not yet in sight.</span></td><td class="durata">Days worked</td><td class="prezzo">Depends on country and sector</td></tr>
+            <tr><td class="servizio"><b>Fixed price</b><span>For work that is already defined, with the price set before we start.</span></td><td class="durata">Agreed</td><td class="prezzo">Depends on country and sector</td></tr>
+          </tbody>
+        </table>
+        <p class="attacco">The rate depends on the country and the sector your company works in: I tell you in the call.</p>
+        <p class="invito">It starts with the call: 30 minutes, free. <a class="bottone" href="https://calendly.com/castronu/30min" target="_blank" rel="noopener">Book the free call</a></p>
+      </div>
+    </section>
+
+    <section class="row sez oss">
+      <div class="rail"><p class="numero">4</p></div>
+      <div>
+        <h2>About me</h2>
+        <div class="testo">
+          <p>I'm Diego Castronuovo, a platform engineer with 15 years of experience in cloud systems and application scalability. My job is keeping production systems running: Kubernetes, Terraform, PostgreSQL, release pipelines, monitoring.</p>
+          <p>When it speeds up delivery, I work across the whole stack.</p>
+          <p>For two specific needs I have two separate services: the fixed-price <a class="fonte" href="/production-audit/">production readiness audit</a> for apps built with AI, and <a class="fonte" href="/ai-agents/">AI agents for engineering teams</a>, in your cloud.</p>
+          <p><a class="fonte" href="https://www.diegocastronuovo.com/">My CV</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="row sez oss">
+      <div class="rail"><p class="numero">5</p></div>
+      <div>
+        <h2>Frequently asked questions</h2>
+        <div class="domande">
+          <div><h3>My need is not among the examples. Is that fine?</h3><p>Yes. The examples show what I have already done; they are not a closed list.</p></div>
+          <div><h3>Why is the rate not on the page?</h3><p>It depends on the country and the sector your company works in. I tell you in the call, before we start.</p></div>
+          <div><h3>Do you work remotely?</h3><p>Yes. I live in Geneva and also work remotely, in Italian, English, French or Spanish.</p></div>
+          <div><h3>How is this different from the production readiness audit and the AI agents?</h3><p>Those are already defined, with a fixed price. This service is for everything else.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row sez oss" id="contatto">
+      <div class="rail"><p class="numero">6</p></div>
+      <div class="chiusura">
+        <h2>Start with the free call.</h2>
+        <p class="attacco">30 minutes on a video call: you tell me what you need and I tell you how I would do it.</p>
+        <a class="bottone chiaro" href="https://calendly.com/castronu/30min" target="_blank" rel="noopener">Book the free call</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="piede">
+    <span>Freelance platform engineering, by Diego Castronuovo</span>
+    <span>Geneva, Switzerland · <a href="mailto:info@diegocastronuovo.com">info@diegocastronuovo.com</a></span>
+    <span>Hands-on engineering for startups, SMEs and tech teams</span>
+  </footer>
+</div>
+
+<script>
+// Starts an element's one-time animation just before it scrolls onto the screen.
+// The animation begins from a hidden state, so it must never start on something the
+// reader can already see: that would show it, hide it and draw it again.
+// Without this script, or with reduced motion, everything simply stays visible.
+(function () {
+  if (!("IntersectionObserver" in window)) return;
+  var ANTICIPO = 80; // px below the screen edge at which the animation starts
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      // Still below the edge: animate. Already showing (a jump, a very fast scroll): leave it alone.
+      if (e.boundingClientRect.top >= window.innerHeight - 4) e.target.classList.add("in-vista");
+    });
+  }, { rootMargin: "0px 0px " + ANTICIPO + "px 0px" });
+  document.querySelectorAll(".oss").forEach(function (el) {
+    // On screen when the page opens: start now, before the first paint.
+    if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add("in-vista");
+    else io.observe(el);
+  });
+})();
+
+// Phone menu: the "Menu" button opens and closes the list of sections.
+(function () {
+  var testata = document.querySelector(".testata");
+  var bottone = document.getElementById("apri-menu");
+  if (!testata || !bottone) return;
+  function imposta(aperta) {
+    testata.classList.toggle("aperta", aperta);
+    bottone.setAttribute("aria-expanded", aperta ? "true" : "false");
+    bottone.textContent = aperta ? bottone.dataset.chiudi : bottone.dataset.apri;
+  }
+  bottone.addEventListener("click", function () { imposta(!testata.classList.contains("aperta")); });
+  testata.querySelectorAll("nav a").forEach(function (a) { a.addEventListener("click", function () { imposta(false); }); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") imposta(false); });
+})();
+</script>
+</body>
+</html>
